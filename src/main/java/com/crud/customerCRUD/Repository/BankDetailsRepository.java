@@ -13,6 +13,5 @@ public interface BankDetailsRepository extends CrudRepository<BankDetails, Strin
 
 	BankDetails findByAccountNo(String accountNo);
 	
-	BankDetails findByCustId(int id);
 
 }

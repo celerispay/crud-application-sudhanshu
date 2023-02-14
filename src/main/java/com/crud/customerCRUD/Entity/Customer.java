@@ -1,73 +1,46 @@
 package com.crud.customerCRUD.Entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Data;
 
 @Entity
 @Table(name = "customer")
+@Data
 public class Customer {
 
 	@Id
 	private int custId;
+	
 	@Column(name = "custName")
+	@NotBlank(message = "Name is mandatory")
 	private String custName;
+	
 	@Column(name = "address")
 	private String address;
+	
+	@NotNull(message="Contact number must be provided")
 	@Column(name = "contactNo")
 	private String contactNo;
 	
-	@OneToOne(fetch = FetchType.LAZY,
-            cascade =  CascadeType.ALL,
-            mappedBy = "customer")
-    private BankDetails bankDetails;
-
-	public Customer() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public Customer(int custId, String custName, String address, String contactNo) {
-		super();
-		this.custId = custId;
-		this.custName = custName;
-		this.address = address;
-		this.contactNo = contactNo;
-	}
-	public int getCustId() {
-		return custId;
-	}
-	public void setCustId(int custId) {
-		this.custId = custId;
-	}
-	public String getCustName() {
-		return custName;
-	}
-	public void setCustName(String custName) {
-		this.custName = custName;
-	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	public String getContactNo() {
-		return contactNo;
-	}
-	public void setContactNo(String contactNo) {
-		this.contactNo = contactNo;
-	}
-	@Override
-	public String toString() {
-		return "Customer [custId=" + custId + ", custName=" + custName + ", address=" + address + ", contactNo="
-				+ contactNo + "]";
-	}
-
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, cascade =  CascadeType.ALL, mappedBy = "customer")
+	private List<BankDetails> bankDetails;
 	
-
+	
 
 }

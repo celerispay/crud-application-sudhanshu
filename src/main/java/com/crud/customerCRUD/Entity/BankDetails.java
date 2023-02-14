@@ -1,87 +1,37 @@
 package com.crud.customerCRUD.Entity;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
-import com.crud.customerCRUD.accountType;
+import com.crud.customerCRUD.Enum.accountType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Table(name="bankDetails")
+@Data
 public class BankDetails {
 	
 	@Id
+	@Size(min = 10, max = 12)
 	private String accountNo;
 	
+	@NotBlank(message = "Bank Name is mandatory")
 	private String bankName;
 	
 	@Enumerated(EnumType.STRING)
 	private accountType accType;
-	
-	@Column(name="custId")
-	private int custId;
 
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id")
-    private Customer customer;
-	
-	
-	public BankDetails() {
-		super();
-	}
+	@ToString.Exclude
+	@ManyToOne
+	private Customer customer;
 
-	public BankDetails(String accountNo, String bankName, accountType accType, int custId) {
-		super();
-		this.accountNo = accountNo;
-		this.bankName = bankName;
-		this.accType = accType;
-		this.custId = custId;
 	}
-
-	public String getAccountNo() {
-		return accountNo;
-	}
-
-	public void setAccountNo(String accountNo) {
-		this.accountNo = accountNo;
-	}
-
-	public String getBankName() {
-		return bankName;
-	}
-
-	public void setBankName(String bankName) {
-		this.bankName = bankName;
-	}
-
-	public accountType getAccType() {
-		return accType;
-	}
-
-	public void setAccType(accountType accType) {
-		this.accType = accType;
-	}
-
-	public int getCustId() {
-		return custId;
-	}
-
-	public void setCustId(int custId) {
-		this.custId = custId;
-	}
-
-	@Override
-	public String toString() {
-		return "BankDetails [accountNo=" + accountNo + ", bankName=" + bankName + ", accType=" + accType + ", custId="
-				+ custId + "]";
-	}
-	 
-	 
-}
