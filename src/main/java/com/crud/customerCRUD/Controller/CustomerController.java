@@ -3,10 +3,8 @@ package com.crud.customerCRUD.Controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import javax.validation.Valid;
-
-
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +15,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.crud.customerCRUD.Entity.BankDetails;
+import org.apache.logging.log4j.Logger;
 import com.crud.customerCRUD.Entity.Customer;
 import com.crud.customerCRUD.Repository.CustomerRepository;
-import com.crud.customerCRUD.customException.BankDetailsNotFoundException;
-import com.crud.customerCRUD.customException.CustomerNotFoundException;
 import com.crud.customerCRUD.service.CustomerService;
+import com.crud.exception.CustomerAlreadyExistsException;
+import com.crud.exception.CustomerNotFoundException;
+import lombok.extern.log4j.Log4j2;
 
 
 
 @RestController
+@Log4j2
 public class CustomerController {
+	Logger logger = LogManager.getLogger(CustomerRepository.class);
 	
 	@Autowired
 	private CustomerRepository customerRepository;
@@ -44,8 +44,8 @@ public class CustomerController {
 	}  
 
 	@GetMapping("/customers/getAll")
-	private List<Customer> getAllCustomers() {
-		System.out.println("Get mapping is called....");
+	private List<Customer> getAllCustomers() throws CustomerNotFoundException{
+		logger.debug("User has requested to get all the customer details");
 		List<Customer> lst = new ArrayList<>();
 		lst = customerService.getAllEmployee();
 		for(Customer cust: lst) {
@@ -53,46 +53,30 @@ public class CustomerController {
 		}
 		return  customerService.getAllEmployee();
 	}
-
-//	@GetMapping("/customers/{id}")
-//	private ResponseEntity<Customer> getCustomerWithId(@PathVariable int id) {			
-//		try {
-//			System.out.println("Get mapping is called....");
-//			Customer cst = customerService.findCustomerById(id);
-//			return new ResponseEntity<Customer>(cst,HttpStatus.OK);
-//		}
-//		catch (CustomerNotFoundException e) {
-//			throw new CustomerNotFoundException("The Customer info is not available:" + id);
-//		}
-//    }
 		
 	@GetMapping("/customers/{id}")
-	public Customer getCustomer(@PathVariable int id) {
-		Optional<Customer> customer = customerRepository.findById(id);
-
-		if (customer.isEmpty())
-			throw new CustomerNotFoundException();
-
-		return customer.get();
+	public Customer getCustomer(@PathVariable int id) throws CustomerNotFoundException{
+		logger.debug("User has requested to get the customer details of Customer having customer id : "+id);
+		return customerService.findCustomerById(id);
 	}
 
 	@DeleteMapping("/customers/delete/{id}")
-	private String deleteCustomer(@PathVariable int id) {
-		System.out.println("Delete mapping is called....");
+	private String deleteCustomer(@PathVariable int id) throws CustomerNotFoundException{
+		logger.debug("User has requested to delete the customer details of Customer having customer id : "+id);
 		customerRepository.deleteById(id);
 		return "Customer with customer id "+id+" is deleted successfully...";
 	}
 
 	@PostMapping("/customers/create")
-	private ResponseEntity<Customer> createCustomer(@Valid @RequestBody Customer customer) {
-		System.out.println("Post mapping is called....");
+	private ResponseEntity<Customer> createCustomer(@Valid @RequestBody Customer customer) throws CustomerAlreadyExistsException{
+		logger.debug("User has requested to Create the customer with details : "+customer);
 		 Customer cst = customerRepository.save(customer);
 		 return new ResponseEntity<Customer>(cst, HttpStatus.BAD_REQUEST);
 	}
 	
 	@PutMapping("/customers/update/{id}")
-	public ResponseEntity<Object> updateStudent(@RequestBody Customer customer, @PathVariable int id) {
-
+	public ResponseEntity<Object> updateStudent(@RequestBody Customer customer, @PathVariable int id) throws CustomerNotFoundException, CustomerAlreadyExistsException{
+		logger.debug("User has requested to update the customer having id "+id +" with details : "+customer);
 		Optional<Customer> customerOptional = customerRepository.findById(id);
 
 		if (customerOptional.isEmpty())

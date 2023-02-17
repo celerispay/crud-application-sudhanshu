@@ -15,10 +15,14 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import com.crud.customerCRUD.Entity.BankDetails;
 import com.crud.customerCRUD.Repository.BankDetailsRepository;
-import com.crud.customerCRUD.customException.BankDetailsNotFoundException;
 import com.crud.customerCRUD.service.BankDetailsService;
+import com.crud.exception.BankDetailsAlreadyExistsException;
+import com.crud.exception.BankDetailsNotFoundException;
+
+import lombok.extern.log4j.Log4j2;
 
 @RestController
+@Log4j2
 public class BankDetailsController {
 	
 	Logger logger = LogManager.getLogger(BankDetailsController.class);
@@ -31,35 +35,34 @@ public class BankDetailsController {
 
 	@GetMapping("/bankdetails/getAll")
 	private List<BankDetails> getAllBankDetails() {
-		logger.info("User has requested to fetch all bank details");
+		logger.debug("User has requested to fetch all bank details");
 		List<BankDetails> lst = bankDetailsService.getAllBankDetails();
 		return lst;
 	}
 
 	@GetMapping("/bankdetails/{accountNo}")
-	private BankDetails getBankDetailsByAccountNo(@PathVariable String accountNo) {
-		logger.info("User has requested to fetch bank details of account :"+ accountNo);
+	private BankDetails getBankDetailsByAccountNo(@PathVariable String accountNo) throws BankDetailsNotFoundException{
+		logger.debug("User has requested to fetch bank details of account :"+ accountNo);
 		try {
 			BankDetails bd = bankDetailsService.findBankDetailByAccountNo(accountNo);
-			if(bd==null) throw new BankDetailsNotFoundException("404", "Bank Account with "+accountNo+" not found");
-			return bd;
+			if(bd==null) throw new BankDetailsNotFoundException("Bank Account with "+accountNo+" not found");
+			else return bd;
 		}
 		catch (BankDetailsNotFoundException e) {
-			throw new BankDetailsNotFoundException(e.getErrorCode(), e.getErrorMessage());
+			throw new BankDetailsNotFoundException("Bank Details not found for this account number");
 		}
-		
 	}
 
 	@DeleteMapping("/bankdetails/delete/{accountNo}")
-	private String deleteBankDetails(@PathVariable String accountNo) {
-		logger.info("Delete mapping is called....");
-		bankDetailsService.deleteBankDetailById(accountNo);
+	private String deleteBankDetails(@PathVariable String accountNo) throws BankDetailsNotFoundException{
+		logger.debug("Delete mapping is called....");
+		bankDetailsRepository.deleteByAccountNo(accountNo);
 		return "Customer with Bank Account number "+accountNo+" is deleted successfully...";
 	}
 
 	@PostMapping("/bankdetails/create")
-	private BankDetails createBankDetails(@Valid @RequestBody BankDetails bankDetails) {
-		logger.info("Post mapping is called....");
+	private BankDetails createBankDetails(@Valid @RequestBody BankDetails bankDetails) throws BankDetailsAlreadyExistsException{
+		logger.debug("Post mapping is called....");
 		return bankDetailsRepository.save(bankDetails);
 	}
 
@@ -71,7 +74,7 @@ public class BankDetailsController {
 		currDetail.setAccType(bankDetails.getAccType());
 		currDetail.setCustomer(bankDetails.getCustomer());
 		
-		logger.info("Put mapping is called....");
+		logger.debug("Put mapping is called....");
 		return "Bank Details with Account number " + accountNo + " is updated Successfully!!!!!";
 	}
 }

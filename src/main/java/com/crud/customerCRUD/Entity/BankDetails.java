@@ -1,5 +1,6 @@
 package com.crud.customerCRUD.Entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -30,6 +31,9 @@ public class BankDetails {
 	@Enumerated(EnumType.STRING)
 	private accountType accType;
 
+	@Column(name="available_balance")
+	private Long availableBalance;
+	
 	@ToString.Exclude
 	@ManyToOne
 	private Customer customer;

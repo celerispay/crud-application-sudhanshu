@@ -8,7 +8,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -36,11 +38,16 @@ public class Customer {
 	@NotNull(message="Contact number must be provided")
 	@Column(name = "contactNo")
 	private String contactNo;
+	@Column(name="total_transactions")
+	private Long totalTransactions;
 	
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, cascade =  CascadeType.ALL, mappedBy = "customer")
 	private List<BankDetails> bankDetails;
 	
-	
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "transaction_id")
+	private Transaction transaction;
+
 
 }
