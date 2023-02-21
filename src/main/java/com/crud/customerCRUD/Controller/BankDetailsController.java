@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +24,7 @@ import lombok.extern.log4j.Log4j2;
 
 @RestController
 @Log4j2
+@RequestMapping("/bankdetails/")
 public class BankDetailsController {
 	
 	Logger logger = LogManager.getLogger(BankDetailsController.class);
@@ -33,14 +35,14 @@ public class BankDetailsController {
 	@Autowired
 	private BankDetailsService bankDetailsService;
 
-	@GetMapping("/bankdetails/getAll")
+	@GetMapping("getAll")
 	private List<BankDetails> getAllBankDetails() {
 		logger.debug("User has requested to fetch all bank details");
 		List<BankDetails> lst = bankDetailsService.getAllBankDetails();
 		return lst;
 	}
 
-	@GetMapping("/bankdetails/{accountNo}")
+	@GetMapping("{accountNo}")
 	private BankDetails getBankDetailsByAccountNo(@PathVariable String accountNo) throws BankDetailsNotFoundException{
 		logger.debug("User has requested to fetch bank details of account :"+ accountNo);
 		try {
@@ -53,20 +55,20 @@ public class BankDetailsController {
 		}
 	}
 
-	@DeleteMapping("/bankdetails/delete/{accountNo}")
+	@DeleteMapping("delete/{accountNo}")
 	private String deleteBankDetails(@PathVariable String accountNo) throws BankDetailsNotFoundException{
 		logger.debug("Delete mapping is called....");
 		bankDetailsRepository.deleteByAccountNo(accountNo);
 		return "Customer with Bank Account number "+accountNo+" is deleted successfully...";
 	}
 
-	@PostMapping("/bankdetails/create")
+	@PostMapping("create")
 	private BankDetails createBankDetails(@Valid @RequestBody BankDetails bankDetails) throws BankDetailsAlreadyExistsException{
 		logger.debug("Post mapping is called....");
 		return bankDetailsRepository.save(bankDetails);
 	}
 
-	@PutMapping("/bankdetails/update/{accountNo}")
+	@PutMapping("update/{accountNo}")
 	private String update(@RequestBody BankDetails bankDetails, @PathVariable String accountNo) {
 		BankDetails currDetail = bankDetailsService.findBankDetailByAccountNo(accountNo);
 		currDetail.setAccountNo(bankDetails.getAccountNo());

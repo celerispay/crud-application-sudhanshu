@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.apache.logging.log4j.Logger;
 import com.crud.customerCRUD.Entity.Customer;
@@ -27,6 +28,7 @@ import lombok.extern.log4j.Log4j2;
 
 @RestController
 @Log4j2
+@RequestMapping("/customers/")
 public class CustomerController {
 	Logger logger = LogManager.getLogger(CustomerRepository.class);
 	
@@ -34,16 +36,9 @@ public class CustomerController {
 	private CustomerRepository customerRepository;
 	
 	@Autowired
-	private CustomerService customerService;
-	
-	
-	@GetMapping("/welcome")  
-	public String welcome()   
-	{  
-	return "Hello User !!!! Welcome......";  
-	}  
+	private CustomerService customerService;  
 
-	@GetMapping("/customers/getAll")
+	@GetMapping("getAll")
 	private List<Customer> getAllCustomers() throws CustomerNotFoundException{
 		logger.debug("User has requested to get all the customer details");
 		List<Customer> lst = new ArrayList<>();
@@ -54,27 +49,27 @@ public class CustomerController {
 		return  customerService.getAllEmployee();
 	}
 		
-	@GetMapping("/customers/{id}")
+	@GetMapping("getById/{id}")
 	public Customer getCustomer(@PathVariable int id) throws CustomerNotFoundException{
 		logger.debug("User has requested to get the customer details of Customer having customer id : "+id);
 		return customerService.findCustomerById(id);
 	}
 
-	@DeleteMapping("/customers/delete/{id}")
+	@DeleteMapping("delete/{id}")
 	private String deleteCustomer(@PathVariable int id) throws CustomerNotFoundException{
 		logger.debug("User has requested to delete the customer details of Customer having customer id : "+id);
 		customerRepository.deleteById(id);
 		return "Customer with customer id "+id+" is deleted successfully...";
 	}
 
-	@PostMapping("/customers/create")
+	@PostMapping("create")
 	private ResponseEntity<Customer> createCustomer(@Valid @RequestBody Customer customer) throws CustomerAlreadyExistsException{
 		logger.debug("User has requested to Create the customer with details : "+customer);
 		 Customer cst = customerRepository.save(customer);
 		 return new ResponseEntity<Customer>(cst, HttpStatus.BAD_REQUEST);
 	}
 	
-	@PutMapping("/customers/update/{id}")
+	@PutMapping("update/{id}")
 	public ResponseEntity<Object> updateStudent(@RequestBody Customer customer, @PathVariable int id) throws CustomerNotFoundException, CustomerAlreadyExistsException{
 		logger.debug("User has requested to update the customer having id "+id +" with details : "+customer);
 		Optional<Customer> customerOptional = customerRepository.findById(id);

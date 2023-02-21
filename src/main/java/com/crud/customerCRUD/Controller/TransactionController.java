@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.crud.customerCRUD.Entity.Transaction;
@@ -12,12 +13,13 @@ import com.crud.customerCRUD.service.TransactionService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
+@RequestMapping("/transaction/")
 public class TransactionController {
 
 	@Autowired
 	private TransactionService transactionService;
 
-	@PostMapping("/performtransaction")
+	@PostMapping("performtransaction")
 	public Transaction performTransaction(@RequestBody Transaction transaction) {
 		Transaction tr = new Transaction();
 		tr.setTransactionId(transaction.getTransactionId());
@@ -25,17 +27,17 @@ public class TransactionController {
 		return transactionService.save(tr);
 	}
 	
-	@GetMapping("/transaction")
+	@GetMapping("/getAll")
 	public List<Transaction> getAllTransaction() {
 		return transactionService.getAllTransactions();
 	}
 
-	@GetMapping("/transaction/{id}")
+	@GetMapping("{id}")
 	public Transaction getTransactionById(@RequestBody Long id) {
 		return transactionService.findByTransactionId(id);
 	}
 
-	@GetMapping("/transactionAmmount/{amount}")
+	@GetMapping("/getByAmount/{amount}")
 	public Transaction getTransactionByTransactionAmount(@RequestBody Long amount) {
 		return transactionService.getByTransactionAmount(amount);
 	}
