@@ -29,7 +29,7 @@ public class Customer {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int custId;
 	
-	@Column(name = "customerName")
+	@Column(name = "customer_name")
 	@NotBlank(message = "Name is mandatory")
 	private String customerName;
 	
@@ -39,12 +39,13 @@ public class Customer {
 	@NotNull(message="Contact number must be provided")
 	@Column(name = "contactNo")
 	private String contactNo;
-//	@Column(name="total_transactions")
-//	private Long totalTransactions;
+
 	
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, cascade =  CascadeType.ALL, mappedBy = "customer")
 	private List<BankDetails> bankDetails;
+	
+	
 	
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "transaction_id")

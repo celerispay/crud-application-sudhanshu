@@ -36,7 +36,7 @@ public class UserController {
         return "index";
     }
  
-    @GetMapping("/addnew")
+    @GetMapping("addnew")
     public String addNewEmployee(Model model) {
         User user = new User();
         model.addAttribute("user", user);

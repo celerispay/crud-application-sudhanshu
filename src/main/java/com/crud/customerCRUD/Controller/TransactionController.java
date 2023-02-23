@@ -3,12 +3,15 @@ package com.crud.customerCRUD.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.crud.customerCRUD.Entity.Transaction;
+import com.crud.customerCRUD.Entity.User;
 import com.crud.customerCRUD.service.TransactionService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
@@ -21,13 +24,18 @@ public class TransactionController {
 
 	@PostMapping("performtransaction")
 	public Transaction performTransaction(@RequestBody Transaction transaction) {
-		Transaction tr = new Transaction();
+		final Transaction tr = new Transaction();
 		tr.setTransactionId(transaction.getTransactionId());
+		tr.setTransactionDate(transaction.getTransactionDate());
+		tr.setClientName(transaction.getClientName());
+		tr.setTransactionType(transaction.getTransactionType());
 		tr.setTransactionAmount(transaction.getTransactionAmount());
 		return transactionService.save(tr);
 	}
 	
-	@GetMapping("/getAll")
+	 
+
+	@GetMapping("getAll")
 	public List<Transaction> getAllTransaction() {
 		return transactionService.getAllTransactions();
 	}
@@ -37,7 +45,7 @@ public class TransactionController {
 		return transactionService.findByTransactionId(id);
 	}
 
-	@GetMapping("/getByAmount/{amount}")
+	@GetMapping("getByAmount/{amount}")
 	public Transaction getTransactionByTransactionAmount(@RequestBody Long amount) {
 		return transactionService.getByTransactionAmount(amount);
 	}

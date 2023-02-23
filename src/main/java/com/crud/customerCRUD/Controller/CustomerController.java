@@ -63,7 +63,7 @@ public class CustomerController {
 	}
 
 	@PostMapping("create")
-	private ResponseEntity<Customer> createCustomer(@Valid @RequestBody Customer customer) throws CustomerAlreadyExistsException{
+	private ResponseEntity<Customer> createCustomer(Customer customer) throws CustomerAlreadyExistsException{
 		logger.debug("User has requested to Create the customer with details : "+customer);
 		 Customer cst = customerRepository.save(customer);
 		 return new ResponseEntity<Customer>(cst, HttpStatus.BAD_REQUEST);

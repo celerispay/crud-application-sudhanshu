@@ -1,6 +1,7 @@
 package com.crud.customerCRUD.config;
 
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -13,15 +14,13 @@ import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
-import org.springframework.core.task.TaskExecutor;
-
 import com.crud.customerCRUD.Entity.Customer;
 import com.crud.customerCRUD.Repository.CustomerRepository;
+import com.crud.customerCRUD.listener.JobCompletionListener;
 
 import lombok.AllArgsConstructor;
+
 
 @Configuration
 @EnableBatchProcessing
@@ -34,6 +33,8 @@ public class SpringBatchConfig {
 	
 	private CustomerRepository customerRepository;
 	
+
+		
 	
 	public FlatFileItemReader<Customer> reader(){
 		FlatFileItemReader<Customer> itemReader = new FlatFileItemReader<>();
@@ -50,7 +51,7 @@ public class SpringBatchConfig {
 		DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
 		lineTokenizer.setDelimiter(",");
 		lineTokenizer.setStrict(false);
-		lineTokenizer.setNames("id","name","address","contactNo","totalTransactions");
+		lineTokenizer.setNames(new String[]{"customername","address","contactNo"});
 		
 		BeanWrapperFieldSetMapper<Customer> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
 		fieldSetMapper.setTargetType(Customer.class);
@@ -88,5 +89,10 @@ public class SpringBatchConfig {
 				.end().build();
 	}
 	
+	
+	@Bean
+	public JobExecutionListener listener() {
+		return new JobCompletionListener();
+	}
 
 }

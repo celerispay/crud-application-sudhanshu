@@ -16,20 +16,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/jobs/")
 public class JobController {
-	
+
 	@Autowired
 	private JobLauncher jobLauncher;
 	@Autowired
 	private Job job;
-	
-	@PostMapping("importCustomers")
-	public void importCsvToJob() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
-		JobParameters jobParameters = new JobParametersBuilder()
-				.addLong("startAt", System.currentTimeMillis()).toJobParameters();
-		
+
+	@RequestMapping("/importCustomers")
+	public String importCsvToJob() throws JobExecutionAlreadyRunningException, JobRestartException,
+			JobInstanceAlreadyCompleteException, JobParametersInvalidException {
+		JobParameters jobParameters = new JobParametersBuilder().addLong("startAt", System.currentTimeMillis())
+				.toJobParameters();
+
 		jobLauncher.run(job, jobParameters);
+		return "Batch job has been invoked";
+
 	}
-	
 }
