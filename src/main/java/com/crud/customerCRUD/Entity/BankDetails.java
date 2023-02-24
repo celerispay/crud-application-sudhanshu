@@ -16,21 +16,27 @@ import javax.validation.constraints.Size;
 import com.crud.customerCRUD.Enum.accountType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
 @Table(name="bank_details")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BankDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
 	
-	@Size(min = 10, max = 12)
+	@Column(name="account_no")
+	@Size(min = 10, max =15)
 	private String accountNo;
 	
 	@NotBlank(message = "Bank Name is mandatory")
+	@Column(name= "bank_name")
 	private String bankName;
 	
 	@Enumerated(EnumType.STRING)

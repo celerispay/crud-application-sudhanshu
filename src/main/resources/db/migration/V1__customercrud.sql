@@ -1,4 +1,12 @@
+START TRANSACTION;
+SET time_zone = "+00:00";
 
+CREATE TABLE `hibernate_sequence` (
+  `next_val` bigint(20) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `hibernate_sequence` (`next_val`) VALUES
+(1);
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
@@ -32,31 +40,35 @@ INSERT INTO `customer` (`cust_id`, `address`, `contact_no`, `customer_name`, `tr
 
 CREATE TABLE `transaction` (
   `id` bigint(20) NOT NULL,
-  `client_name` varchar(255) DEFAULT NULL,
-  `transaction_amount` bigint(20) DEFAULT NULL,
+  `transaction_id` varchar(800) DEFAULT NULL,
   `transaction_date` date DEFAULT NULL,
-  `transaction_id` varchar(255) DEFAULT NULL,
-  `transaction_type` int(11) DEFAULT NULL
+  `client_name` varchar(255) DEFAULT NULL,
+  `transaction_type` varchar(255) DEFAULT NULL,
+  `transaction_amount` bigint(20) DEFAULT NULL
+  
+  
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
---INSERT INTO `transaction` (`id`, `client_name`, `transaction_amount`, `transaction_date`, `transaction_id`, `transaction_type`) VALUES
---(509, NULL, NULL, NULL, NULL, NULL)
+INSERT INTO `transaction` (`id`,`transaction_id`,`transaction_date`,`client_name`,`transaction_type`, `transaction_amount`) VALUES
+(509,'48EF4798-6CE7-6E2C-3273-8FB42F83DE62','2008-11-11','purchase', 'State Bank Of India', 30000);
 
 
 
 CREATE TABLE `bank_details` (
-  `account_no` varchar(12) NOT NULL,
-    `bank_name` varchar(255) DEFAULT NULL,
+`id` bigint(20) NOT NULL,
+  `account_no` varchar(500) DEFAULT NULL,
+    `bank_name` varchar(855) DEFAULT NULL,
   `acc_type` varchar(255) DEFAULT NULL,
-  `available_balance` bigint(20) DEFAULT NULL,
+  `available_balance` bigint(50) DEFAULT NULL,
 
-  `customer_cust_id` int(11) DEFAULT NULL
+  `customer_cust_id` int(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
-INSERT INTO `bank_details` (`account_no`, `acc_type`, `available_balance`, `bank_name`, `customer_cust_id`) VALUES
-('SBI12345678', 'SAVING', 5000000, 'State Bank Of India', NULL);
+INSERT INTO `bank_details` (`id`,`account_no`, `acc_type`, `available_balance`, `bank_name`, `customer_cust_id`) VALUES
+(401,'SBI12345678', 'SAVING', 5000000, 'State Bank Of India', 108);
 
-
+COMMIT;
 
