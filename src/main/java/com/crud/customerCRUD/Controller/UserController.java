@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,19 +45,19 @@ public class UserController {
     }
  
     @PostMapping("/save")
-    public String saveEmployee(@ModelAttribute("user") User user) {
+    public String saveEmployee(@Valid @ModelAttribute("user") User user) {
         userService.save(user);
         return "redirect:/";
     }
  
     @GetMapping("/update/{email}")
-    public String updateForm(@PathVariable(value = "email") String email, Model model) {
+    public String updateForm(@Valid @PathVariable(value = "email") String email, Model model) {
         User user = userService.findByEmail(email);
         model.addAttribute("employee", user);
         return "update";
     }
  
-    @GetMapping("/deleteEmployee/{email}")
+    @DeleteMapping("/deleteEmployee/{email}")
     public String deleteThroughId(@PathVariable(value = "email") String email) {
         userService.deleteByEmail(email);
         return "redirect:/";

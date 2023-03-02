@@ -7,7 +7,7 @@ import com.crud.customerCRUD.Entity.Transaction;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long>{
-	Transaction findByTransactionId(long transactionId);
+	Transaction findByTransactionId(String transactionId);
 	
 	Transaction findByTransactionAmount(long amount);
 }

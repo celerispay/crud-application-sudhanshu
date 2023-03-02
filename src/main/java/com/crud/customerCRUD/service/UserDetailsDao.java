@@ -3,7 +3,9 @@ package com.crud.customerCRUD.service;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserDetailsDao {
 
 	public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 public class JobController {
 
@@ -23,7 +25,8 @@ public class JobController {
 	@Autowired
 	private Job job;
 
-	@RequestMapping("/importCustomers")
+	@Operation(summary = "Perform the Spring batch Task",description = "This API will import the customer data from csv file to the data base using Spring batch",parameters = {})
+	@GetMapping("/importCustomers")
 	public String importCsvToJob() throws JobExecutionAlreadyRunningException, JobRestartException,
 			JobInstanceAlreadyCompleteException, JobParametersInvalidException {
 		JobParameters jobParameters = new JobParametersBuilder().addLong("startAt", System.currentTimeMillis())

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.crud.customerCRUD.Entity.User;
 import com.crud.customerCRUD.Repository.CustomerRepository;
+import com.crud.customerCRUD.Repository.TransactionRepository;
 import com.crud.customerCRUD.Repository.UserRepository;
 
 import antlr.collections.List;
@@ -24,6 +25,10 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 
+	public UserService(UserRepository userRepository) {
+    	this.userRepository=userRepository;
+    }
+	
 	Logger logger = LogManager.getLogger(CustomerRepository.class);
 	
 	@Autowired

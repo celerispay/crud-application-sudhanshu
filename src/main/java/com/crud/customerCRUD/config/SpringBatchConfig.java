@@ -63,7 +63,7 @@ public class SpringBatchConfig {
 	}
 	
 	@Bean
-	public CustomerProcessor processor() {
+	CustomerProcessor processor() {
 		return new CustomerProcessor(); 
 	}
 	
@@ -83,7 +83,7 @@ public class SpringBatchConfig {
 	}
 	
 	@Bean
-	public Job runJob() {
+	Job runJob() {
 		return jobBuilderFactory.get("importcustomers")
 				.flow(step1())
 				.end().build();
@@ -91,7 +91,7 @@ public class SpringBatchConfig {
 	
 	
 	@Bean
-	public JobExecutionListener listener() {
+	JobExecutionListener listener() {
 		return new JobCompletionListener();
 	}
 

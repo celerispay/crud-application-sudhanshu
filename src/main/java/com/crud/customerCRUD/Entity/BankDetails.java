@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -17,6 +18,7 @@ import com.crud.customerCRUD.Enum.accountType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -26,6 +28,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class BankDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -46,8 +49,21 @@ public class BankDetails {
 	@Column(name="available_balance")
 	private Long availableBalance;
 	
+	@JsonIgnore
 	@ToString.Exclude
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Customer customer;
 
+	public BankDetails(Long id, @Size(min = 10, max = 15) String accountNo,
+			@NotBlank(message = "Bank Name is mandatory") String bankName, accountType accType, Long availableBalance) {
+		super();
+		this.id = id;
+		this.accountNo = accountNo;
+		this.bankName = bankName;
+		this.accType = accType;
+		this.availableBalance = availableBalance;
 	}
+
+	
+	
+}

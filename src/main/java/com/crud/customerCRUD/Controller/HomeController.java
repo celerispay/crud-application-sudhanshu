@@ -1,5 +1,7 @@
 package com.crud.customerCRUD.Controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,14 +34,14 @@ public class HomeController {
 	}
 	
 	
-	@GetMapping("performtransaction")
+	@GetMapping("/performtransaction")
 	  public String transactionsForm(Model model) {
 	    model.addAttribute("greeting", new Transaction());
-	    return "transaction";
+	    return "transactionForm";
 	  }
 
 	  @PostMapping("performtransaction")
-	  public String transactionSubmit(@ModelAttribute Transaction transaction, Model model) {
+	  public String transactionSubmit(@ModelAttribute @Valid Transaction transaction, Model model) {
 	    model.addAttribute("transaction", transaction);
 	    return "result";
 	  }
@@ -55,7 +57,7 @@ public class HomeController {
 	}
 
 	@PostMapping("/register")
-	public String customerRegistration(final User user, final Model model) {
+	public String customerRegistration(@Valid User user, final Model model) {
 		userService.save(user);
 		return "header";
 	}
