@@ -69,7 +69,7 @@ class CustomerControllerTest {
 	@Test
 	void testCreateCustomer() throws Exception {
 		when(service.findCustomerById(Mockito.anyInt())).thenReturn(customer);
-//		when(service.saveCustomer(Mockito.any(Customer.class))).thenReturn(customer);
+		when(service.saveCustomer(Mockito.any(Customer.class))).thenReturn(customer);
 		
 		this.mockMvc.perform(post("/customers/create")
 				.contentType(MediaType.APPLICATION_JSON)

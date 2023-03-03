@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+
 import javax.validation.Valid;
 
 import org.slf4j.MDC;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.crud.customerCRUD.Entity.Customer;
@@ -29,6 +32,7 @@ import com.crud.customerCRUD.service.CustomerService;
 import com.crud.exception.CustomerAlreadyExistsException;
 import com.crud.exception.CustomerNotFoundException;
 
+import io.swagger.annotations.ResponseHeader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -60,15 +64,14 @@ public class CustomerController {
 			  @ApiResponse(responseCode = "404", description = "No Customer found", 
 			    content = @Content) })
 	@GetMapping("/getAll")
+	@ResponseHeader
 	@ResponseStatus(HttpStatus.OK)
-	private List<Customer> getAllCustomers(@RequestHeader("correlation-id") String correlationId) throws CustomerNotFoundException {
-		log.debug("User has requested to get all the customer details");
+	private List<Customer> getAllCustomers() throws CustomerNotFoundException {
+        MDC.put("Request-Key", UUID.randomUUID().toString());
+        log.info("CustomerController.getAllCustomers() called by User");
 		List<Customer> lst = new ArrayList<>();
 		lst = customerService.getAll();
-		for (Customer cust : lst) {
-			System.out.println(cust);
-		}
-		return customerService.getAll();
+		return lst;
 	}
 
 	@Operation(summary = "Fetch the Customer with ID",description = "This API will Return the Customer with Specific customer Id",parameters = {})
@@ -85,6 +88,7 @@ public class CustomerController {
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/getById/{id}")
 	public Customer getCustomerById(@PathVariable int id) throws CustomerNotFoundException {
+		MDC.put("Request-Key", UUID.randomUUID().toString());
 		log.debug("User has requested to get the customer details of Customer having customer id : {} " , id);
 		return customerService.findCustomerById(id);
 	}
