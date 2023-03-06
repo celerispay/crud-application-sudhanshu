@@ -3,9 +3,12 @@ package com.crud.customerCRUD.Controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import javax.validation.Valid;
 
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -35,7 +38,7 @@ import lombok.extern.log4j.Log4j2;
 
 @RestController
 @Log4j2
-@RequestMapping("/bankdetails/")
+@RequestMapping("/bankdetails")
 public class BankDetailsController {
 	
 	@Autowired
@@ -55,8 +58,9 @@ public class BankDetailsController {
 			    content = @Content), 
 			  @ApiResponse(responseCode = "404", description = "Bank Details not found", 
 			    content = @Content) })
-	@GetMapping("getAll")
+	@GetMapping("/getAll")
 	private List<BankDetails> getAllBankDetails() {
+		setupMDC("/bankdetails/getAll");
 		log.debug("User has requested to fetch all bank details");
 		List<BankDetails> lst = bankDetailsService.getAllBankDetails();
 		return lst;
@@ -73,8 +77,9 @@ public class BankDetailsController {
 			    content = @Content), 
 			  @ApiResponse(responseCode = "404", description = "Bank Details not found", 
 			    content = @Content) })
-	@GetMapping("{accountNo}")
+	@GetMapping("/getByAccountNo/{accountNo}")
 	private BankDetails getBankDetailsByAccountNo(@PathVariable @Valid String accountNo) throws BankDetailsNotFoundException{
+		setupMDC("/bankdetails/getByAccountNo");
 		log.debug("User has requested to fetch bank details of account {} :", accountNo);
 		try {
 			BankDetails bd = bankDetailsService.findBankDetailByAccountNo(accountNo);
@@ -98,8 +103,9 @@ public class BankDetailsController {
 			    content = @Content), 
 			  @ApiResponse(responseCode = "404", description = "Bank Details not found", 
 			    content = @Content) })
-	@DeleteMapping("delete/{accountNo}")
+	@DeleteMapping("deleteByAccountNo/{accountNo}")
 	private String deleteBankDetails(@PathVariable @Valid String accountNo) throws BankDetailsNotFoundException{
+		setupMDC("/bankdetails/deleteByAccountNo");
 		log.debug("User has requested to delete bank details of account {} :", accountNo);
 		bankDetailsRepository.deleteByAccountNo(accountNo);
 		return "Customer with Bank Account number "+accountNo+" is deleted successfully...";
@@ -115,8 +121,9 @@ public class BankDetailsController {
 			    content = @Content), 
 			  @ApiResponse(responseCode = "500", description = "Internal Server Error", 
 			    content = @Content) })
-	@PostMapping("create")
+	@PostMapping("/create")
 	private BankDetails createBankDetails(@RequestBody @Valid BankDetails bankDetails) throws BankDetailsAlreadyExistsException{
+		setupMDC("/bankdetails/create");
 		log.debug("User has requested to create bank details with data :", bankDetails);
 		return bankDetailsRepository.save(bankDetails);
 	}
@@ -133,6 +140,7 @@ public class BankDetailsController {
 			    content = @Content)})
 	@PutMapping("update/{accountNo}")
 	private String update(@RequestBody @Valid BankDetails bankDetails, @PathVariable String accountNo) {
+		setupMDC("/bankdetails/update");
 		log.debug("User has requested to update bank details of account Number {} :", accountNo);
 		BankDetails currDetail = bankDetailsService.findBankDetailByAccountNo(accountNo);
 		currDetail.setAccountNo(bankDetails.getAccountNo());
@@ -152,5 +160,17 @@ public class BankDetailsController {
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+	
+	/**
+     * Setup MDC variables.
+     *
+     * @param method the api endpoint that was called
+     */
+	
+	private void setupMDC(String method) {
+        MDC.clear();
+        MDC.put("method", method);
+        MDC.put("transactionId", UUID.randomUUID().toString());
     }
 }

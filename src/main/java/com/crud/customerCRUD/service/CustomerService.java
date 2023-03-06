@@ -64,6 +64,7 @@ public class CustomerService {
 	}
 	
 	public Customer updateCustomer(int custId, Customer customerData) {
+		System.out.println("I am called");
 		Customer customer = customerRepository.findById(custId).get();
 		customer.setCustId(customerData.getCustId());
 		customer.setCustomerName(customerData.getCustomerName());

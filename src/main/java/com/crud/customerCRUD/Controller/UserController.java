@@ -1,5 +1,7 @@
 package com.crud.customerCRUD.Controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ import com.crud.customerCRUD.service.UserService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
-@RequestMapping("/user/")
+@RequestMapping("/user")
 public class UserController {
 
 	@Autowired
@@ -31,17 +33,16 @@ public class UserController {
 	private UserRepository userRepository;
 
 	
-	@GetMapping("/")
-    public String viewHomePage(Model model) {
-        model.addAttribute("alluserlist", userService.getAll());
-        return "index";
-    }
- 
-    @GetMapping("addnew")
+    @GetMapping("/addnew")
     public String addNewEmployee(Model model) {
         User user = new User();
         model.addAttribute("user", user);
         return "newuser";
+    }
+    
+    @GetMapping("/getAll")
+    public List<User> getAllUsers() {
+        return userService.getAll();
     }
  
     @PostMapping("/save")

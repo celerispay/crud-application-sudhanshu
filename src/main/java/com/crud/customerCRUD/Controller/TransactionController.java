@@ -3,9 +3,11 @@ package com.crud.customerCRUD.Controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -33,7 +35,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.log4j.Log4j2;
 
 @RestController
-@RequestMapping("/transaction/")
+@RequestMapping("/transaction")
 @Log4j2
 public class TransactionController {
 
@@ -49,8 +51,9 @@ public class TransactionController {
 			    content = @Content), 
 			  @ApiResponse(responseCode = "500", description = "Internal Server Error", 
 			    content = @Content) })
-	@PostMapping("performtransaction")
+	@PostMapping("/performtransaction")
 	public Transaction performTransaction(@RequestBody @Valid Transaction transaction) {
+		MDC.put("Request-Key", UUID.randomUUID().toString());
 		log.debug("User has requested to perform transaction {} with data ",transaction);
 		final Transaction tr = new Transaction();
 		tr.setTransactionId(transaction.getTransactionId());
@@ -73,8 +76,9 @@ public class TransactionController {
 			    content = @Content), 
 			  @ApiResponse(responseCode = "404", description = "No Transaction Details found", 
 			    content = @Content) })
-	@GetMapping("getAll")
+	@GetMapping("/getAll")
 	public List<Transaction> getAllTransaction() {
+		MDC.put("Request-Key", UUID.randomUUID().toString());
 		log.debug("User has requested to fetch all transaction data");
 		return transactionService.getAllTransactions();
 	}
@@ -92,6 +96,7 @@ public class TransactionController {
 			    content = @Content) })
 	@GetMapping("{id}")
 	public Transaction getTransactionById(@RequestBody String id) {
+		MDC.put("Request-Key", UUID.randomUUID().toString());
 		log.debug("User has requested to fetch transaction details with transaction id {} ",id);
 		return transactionService.findByTransactionId(id);
 	}

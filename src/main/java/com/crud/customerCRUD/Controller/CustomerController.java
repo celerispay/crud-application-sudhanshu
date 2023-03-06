@@ -67,7 +67,7 @@ public class CustomerController {
 	@ResponseHeader
 	@ResponseStatus(HttpStatus.OK)
 	private List<Customer> getAllCustomers() throws CustomerNotFoundException {
-        MDC.put("Request-Key", UUID.randomUUID().toString());
+		setupMDC("/customers/getAll");
         log.info("CustomerController.getAllCustomers() called by User");
 		List<Customer> lst = new ArrayList<>();
 		lst = customerService.getAll();
@@ -88,7 +88,7 @@ public class CustomerController {
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping("/getById/{id}")
 	public Customer getCustomerById(@PathVariable int id) throws CustomerNotFoundException {
-		MDC.put("Request-Key", UUID.randomUUID().toString());
+		setupMDC("/customers/getById/{id}");
 		log.debug("User has requested to get the customer details of Customer having customer id : {} " , id);
 		return customerService.findCustomerById(id);
 	}
@@ -107,6 +107,7 @@ public class CustomerController {
 	@ResponseStatus(HttpStatus.OK)
 	@DeleteMapping("/delete/{id}")
 	public String deleteCustomer(@PathVariable int id) throws CustomerNotFoundException {
+		setupMDC("/customers/delete/{id}");
 		log.debug("User has requested to delete the customer details of Customer having customer id : {} " , id);
 		customerService.deleteCustomerById(id);
 		return "Customer with customer id " + id + " is deleted successfully...";
@@ -124,6 +125,7 @@ public class CustomerController {
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/create")
 	public ResponseEntity<Customer> createCustomer(@RequestBody @Valid Customer customer) throws CustomerAlreadyExistsException {
+		setupMDC("/customers/create");
 		log.debug("User has requested to Create the customer with details : {} " , customer);
 		if(customerService.findCustomerById(customer.getCustId()).equals(null)) {
 			Customer cst = customerService.saveCustomer(customer);
@@ -148,6 +150,7 @@ public class CustomerController {
 	@PutMapping("/update/{id}")
 	public ResponseEntity<Object> updateCustomer(@PathVariable int id, @RequestBody @Valid Customer customer)
 			throws CustomerNotFoundException, CustomerAlreadyExistsException {
+		setupMDC("/customers/update/{id}");
 		log.debug("User has requested to update the customer having id: {} " , id);
 		Optional<Customer> customerOptional = Optional.of(customerService.findCustomerById(id));
 
@@ -167,5 +170,17 @@ public class CustomerController {
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+	
+	/**
+     * Setup MDC variables.
+     *
+     * @param method the api endpoint that was called
+     */
+	
+	private void setupMDC(String method) {
+        MDC.clear();
+        MDC.put("method", method);
+        MDC.put("transactionId", UUID.randomUUID().toString());
     }
 }

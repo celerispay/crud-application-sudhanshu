@@ -12,24 +12,42 @@ Configutation:
       name: Console_Appender
       target: SYSTEM_OUT
       PatternLayout:
-        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+         pattern: "[%-5level] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] [%c{1}] [%X{method} ][ %X{transactionId}] - [%msg] %n"
 
     File:
       name: File_Appender
       fileName: ${log-path}/logfile.log
       PatternLayout:
-        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+        pattern: "[%-5level] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] [%c{1}] [%X{method} ][ %X{transactionId}] - [%msg] %n"
+
+    RollingFile:
+      - name: RollingFile_Appender
+        fileName: ${log-path}/rollingfile.log
+        filePattern: "logs/archive/rollingfile.log.%d{yyyy-MM-dd-hh-mm}.gz"
+        PatternLayout:
+           pattern: "[%-5level] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] [%c{1}] [%X{method} ][ %X{transactionId}] - [%msg] %n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: 1 KB
+        DefaultRollOverStrategy:
+          max: 30
 
   Loggers:
-
-      Root:
-        level: debug
+      Root: 
+        level: 
+        org.springframework.web: ERROR
+        org.hibernate: DEBUG
         AppenderRef:
-          - ref: Console_Appender
-
+          - ref: File_Appender
+          
       Logger:
-        - name: guru.springframework.blog.log4j2yaml
+        - name: com.crud.customerCRUD
+          additivity: false
           level: debug
           AppenderRef:
+            - ref: Console_Appender
+              level: debug
             - ref: File_Appender
-              level: error             
+              level: error
+            - ref: RollingFile_Appender
+              level: TRACE

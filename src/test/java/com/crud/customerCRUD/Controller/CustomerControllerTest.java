@@ -118,7 +118,7 @@ class CustomerControllerTest {
 		System.out.println(customer);
 		when(service.findCustomerById( Mockito.anyInt())).thenReturn(customer);
 		when(service.updateCustomer( Mockito.anyInt(),Mockito.any(Customer.class))).thenReturn(customer);		
-		this.mockMvc.perform(put("/customers/update/{id}", 101)
+		this.mockMvc.perform(put("/customers/update/{id}", 100)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(customer1)))
 		.andExpect(status().isOk())
