@@ -22,20 +22,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.crud.customer_crud.entity.Customer;
+import com.crud.customer_crud.exception.AlreadyExistException;
+import com.crud.customer_crud.exception.NotFoundException;
 import com.crud.customer_crud.service.CustomerService;
-import com.crud.exception.CustomerAlreadyExistsException;
-import com.crud.exception.NotFoundException;
 
 import io.swagger.annotations.ResponseHeader;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -109,7 +106,7 @@ public class CustomerController {
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping("/create")
 	public ResponseEntity<Customer> createCustomer(@RequestBody @Valid Customer customer)
-			throws CustomerAlreadyExistsException {
+			throws AlreadyExistException {
 		setupMDC("/customers/create");
 		log.debug("User has requested to Create the customer with details : {} ", customer);
 		Customer cst = customerService.saveCustomer(customer);

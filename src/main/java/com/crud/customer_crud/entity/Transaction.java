@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.crud.customer_crud.Enum.TransactionType;
+import com.crud.customer_crud.enums.TransactionType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;

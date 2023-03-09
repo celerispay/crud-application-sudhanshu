@@ -1,8 +1,0 @@
-[INFO ] [2023-03-07 17:26:20.993] [Test worker] [CustomerController] [ ][ ] - [updateBankDetails method for updating BankDetails is called] 
-[INFO ] [2023-03-07 17:26:21.223] [Test worker] [CustomerService] [ ][ ] - [DeleteCustomer method for called to delete Customers with id 100] 
-[INFO ] [2023-03-07 17:26:21.228] [Test worker] [CustomerService] [ ][ ] - [findCustomerById method for getting Customers with id 100 is called] 
-[INFO ] [2023-03-07 17:26:21.231] [Test worker] [CustomerService] [ ][ ] - [updateCustomer method for updating Customers is called] 
-[INFO ] [2023-03-07 17:26:21.235] [Test worker] [CustomerService] [ ][ ] - [GetAll method for getting all Customers is called] 
-[INFO ] [2023-03-07 17:26:21.239] [Test worker] [CustomerService] [ ][ ] - [findCustomerById method for getting Customers with id 100 is called] 
-[INFO ] [2023-03-07 17:26:21.242] [Test worker] [CustomerService] [ ][ ] - [saveCustomer method for saving Customers is called] 
-[INFO ] [2023-03-07 17:26:21.242] [Test worker] [CustomerService] [ ][ ] - [Populate Customer Data method called for populating Customers data ] 

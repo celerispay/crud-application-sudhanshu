@@ -2,22 +2,18 @@ package com.crud.customer_crud.service;
 
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.crud.customer_crud.Repository.BankDetailsRepository;
-import com.crud.customer_crud.controller.CustomerController;
 import com.crud.customer_crud.entity.BankDetails;
-import com.crud.customer_crud.entity.Customer;
-import com.crud.exception.BankDetailsNotFoundException;
-import com.crud.exception.NotFoundException;
+import com.crud.customer_crud.exception.NotFoundException;
+import com.crud.customer_crud.repository.BankDetailsRepository;
+
+import lombok.extern.log4j.Log4j2;
 
 @Service
+@Log4j2
 public class BankDetailsService {
-
-	Logger logger = LogManager.getLogger(CustomerController.class);
 	
 	@Autowired
 	private BankDetailsRepository bankDetailsRepository;
@@ -26,20 +22,20 @@ public class BankDetailsService {
 		this.bankDetailsRepository = bankDetailsRepository;
 	}
 
-	public List<BankDetails> getAllBankDetails() throws BankDetailsNotFoundException {
+	public List<BankDetails> getAllBankDetails() throws NotFoundException {
 		return bankDetailsRepository.findAll();
 
 	}
 
-	public BankDetails createBankDetails(BankDetails bankDetails) throws BankDetailsNotFoundException {
+	public BankDetails createBankDetails(BankDetails bankDetails) throws NotFoundException {
 		return bankDetailsRepository.save(bankDetails);
 	}
 
-	public BankDetails findBankDetailByAccountNo(String accountNo) throws BankDetailsNotFoundException {
+	public BankDetails findBankDetailByAccountNo(String accountNo) throws NotFoundException {
 
 		BankDetails bankDetails;
 		if (bankDetailsRepository.findByAccountNo(accountNo) == null) {
-			throw new BankDetailsNotFoundException("Bank details not found !");
+			throw new NotFoundException("Bank details not found !");
 		} else {
 			bankDetails = bankDetailsRepository.findByAccountNo(accountNo);
 		}
@@ -54,7 +50,7 @@ public class BankDetailsService {
 		bdetails.setBankName(bankDetails.getBankName());
 		bdetails.setAccType(bankDetails.getAccType());
 		bdetails.setAvailableBalance(bankDetails.getAvailableBalance());
-		logger.info("updateBankDetails method for updating BankDetails is called");
+		log.info("updateBankDetails method for updating BankDetails is called");
 		return bankDetailsRepository.save(bdetails);
 	}
 

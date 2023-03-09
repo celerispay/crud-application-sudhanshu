@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.crud.customer_crud.Repository.CustomerRepository;
 import com.crud.customer_crud.entity.Customer;
+import com.crud.customer_crud.repository.CustomerRepository;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -24,8 +24,7 @@ public class CustomerService {
 
 	public List<Customer> getAll() {
 		log.info("GetAll method for getting all Customers is called");
-		List<Customer> custList = customerRepository.findAll();
-		return custList;
+		return customerRepository.findAll();
 	}
 
 	public Customer findCustomerById(int id) throws Exception {

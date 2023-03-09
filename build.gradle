@@ -63,6 +63,7 @@ sonarqube {
         property "sonar.login", "admin"
         property "sonar.password", "admin123"
         property "sonar.projectKey", "project:customerCRUD"
+        property "sonar.tockenId", "aef22c9297e366279cf8225ef10cd816ef858ce9"
         property 'sonar.projectName', 'Customer CRUD'
         property 'sonar.java.source', 13
         property 'sonar.junit.reportPaths', 'build/results'

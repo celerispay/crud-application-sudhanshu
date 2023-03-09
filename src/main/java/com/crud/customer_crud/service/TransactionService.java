@@ -5,10 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.crud.customer_crud.Repository.CustomerRepository;
-import com.crud.customer_crud.Repository.TransactionRepository;
 import com.crud.customer_crud.entity.Transaction;
-import com.crud.exception.BankDetailsNotFoundException;
+import com.crud.customer_crud.repository.TransactionRepository;
 
 @Service
 public class TransactionService {

@@ -4,21 +4,15 @@ import java.util.ArrayList;
 
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.crud.customer_crud.Repository.CustomerRepository;
-import com.crud.customer_crud.Repository.TransactionRepository;
-import com.crud.customer_crud.Repository.UserRepository;
 import com.crud.customer_crud.entity.User;
+import com.crud.customer_crud.repository.UserRepository;
 
-import antlr.collections.List;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
+
 @Service
 public class UserService {
 
@@ -28,8 +22,6 @@ public class UserService {
 	public UserService(UserRepository userRepository) {
     	this.userRepository=userRepository;
     }
-	
-	Logger logger = LogManager.getLogger(CustomerRepository.class);
 	
 	@Autowired
 	public void setUserRepository(UserRepository userRepository) {
@@ -50,7 +42,6 @@ public class UserService {
 		user.setEmail(userData.getEmail());
 		user.setPassword(passwordEncoder.encode(userData.getPassword()));
 		user.setRole(userData.getRole());
-		logger.info("Encoded password for test is : "+ passwordEncoder.encode("test"));
 		return user;
 	}
 

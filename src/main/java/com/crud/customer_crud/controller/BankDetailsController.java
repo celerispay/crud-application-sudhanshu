@@ -26,9 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.crud.customer_crud.entity.BankDetails;
 import com.crud.customer_crud.entity.Customer;
+import com.crud.customer_crud.exception.AlreadyExistException;
+import com.crud.customer_crud.exception.NotFoundException;
 import com.crud.customer_crud.service.BankDetailsService;
-import com.crud.exception.BankDetailsAlreadyExistsException;
-import com.crud.exception.BankDetailsNotFoundException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -76,16 +76,16 @@ public class BankDetailsController {
 			  @ApiResponse(responseCode = "404", description = "Bank Details not found", 
 			    content = @Content) })
 	@GetMapping("/getByAccountNo/{accountNo}")
-	public BankDetails getBankDetailsByAccountNo(@PathVariable @Valid String accountNo) throws BankDetailsNotFoundException{
+	public BankDetails getBankDetailsByAccountNo(@PathVariable @Valid String accountNo) throws NotFoundException{
 		setupMDC("/bankdetails/getByAccountNo");
 		log.debug("User has requested to fetch bank details of account {} :", accountNo);
 		try {
 			BankDetails bd = bankDetailsService.findBankDetailByAccountNo(accountNo);
-			if(bd==null) throw new BankDetailsNotFoundException("Bank Account with "+accountNo+" not found");
+			if(bd==null) throw new NotFoundException("Bank Account with "+accountNo+" not found");
 			else return bd;
 		}
-		catch (BankDetailsNotFoundException e) {
-			throw new BankDetailsNotFoundException("Bank Details not found for this account number");
+		catch (NotFoundException e) {
+			throw new NotFoundException("Bank Details not found for this account number");
 		}
 	}
 
@@ -102,7 +102,7 @@ public class BankDetailsController {
 			  @ApiResponse(responseCode = "404", description = "Bank Details not found", 
 			    content = @Content) })
 	@DeleteMapping("/deleteByAccountNo/{accountNo}")
-	public String deleteBankDetails(@PathVariable @Valid String accountNo) throws BankDetailsNotFoundException{
+	public String deleteBankDetails(@PathVariable @Valid String accountNo) throws NotFoundException{
 		setupMDC("/bankdetails/deleteByAccountNo");
 		log.debug("User has requested to delete bank details of account {} :", accountNo);
 		bankDetailsService.deleteBankDetailsByAccountNo(accountNo);
@@ -120,7 +120,7 @@ public class BankDetailsController {
 			  @ApiResponse(responseCode = "500", description = "Internal Server Error", 
 			    content = @Content) })
 	@PostMapping("/create")
-	public ResponseEntity<BankDetails> createBankDetails(@RequestBody @Valid BankDetails bankDetails) throws BankDetailsAlreadyExistsException{
+	public ResponseEntity<BankDetails> createBankDetails(@RequestBody @Valid BankDetails bankDetails) throws AlreadyExistException{
 		setupMDC("/bankdetails/create");
 		log.debug("User has requested to create bank details with data :", bankDetails);
 		BankDetails bd = bankDetailsService.createBankDetails(bankDetails);

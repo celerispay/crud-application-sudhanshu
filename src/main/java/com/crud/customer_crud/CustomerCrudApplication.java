@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import lombok.extern.log4j.Log4j2;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
 
