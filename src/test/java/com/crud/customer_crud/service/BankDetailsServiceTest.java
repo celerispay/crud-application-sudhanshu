@@ -46,7 +46,7 @@ class BankDetailsServiceTest {
 
 	@DisplayName("JUnit test for CreateBankDetails method")
 	@Test
-	public void testCreateBankDetails() {
+	void testCreateBankDetails() {
 		Mockito.when(repo.save(Mockito.any(BankDetails.class))).thenReturn(bankDetails);
 
 		BankDetails savedBankDetails = service.createBankDetails(bankDetails);
@@ -59,7 +59,7 @@ class BankDetailsServiceTest {
 
 	@DisplayName("JUnit test for GetAllBankDetails method")
 	@Test
-	public void testGetAllBankDetails() {
+	void testGetAllBankDetails() {
 		BankDetails bDetails = BankDetails.builder().accountNo("SBI235432876").bankName("State Bank Of India")
 				.accType(AccountType.CURRENT).availableBalance(60000L).build();
 
@@ -75,7 +75,7 @@ class BankDetailsServiceTest {
 
 	@DisplayName("JUnit test for FindBankDetailByAccountNo method")
 	@Test
-	public void testFindBankDetailByAccountNo() {
+	void testFindBankDetailByAccountNo() {
 		// when
 		Mockito.when(repo.findByAccountNo(Mockito.anyString())).thenReturn(bankDetails);
 
@@ -99,7 +99,7 @@ class BankDetailsServiceTest {
 
 	@DisplayName("JUnit test for UpdateBankDetails method")
 	@Test
-	public void testUpdateBankDetails() {
+	void testUpdateBankDetails() {
 		BankDetails bDetails = BankDetails.builder().accountNo("CBI98765432").bankName("Central Bank Of India")
 				.accType(AccountType.SAVING).availableBalance(6000L).build();
 
@@ -117,7 +117,7 @@ class BankDetailsServiceTest {
 
 	@DisplayName("JUnit test for deleteBankDetailsByAccountNo method")
 	@Test
-	public void testDeleteBankDetailsByAccountNo() {
+	void testDeleteBankDetailsByAccountNo() {
 
 		String accountNo = "SBI235432678";
 

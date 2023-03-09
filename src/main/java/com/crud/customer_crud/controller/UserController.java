@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.crud.customer_crud.entity.User;
-import com.crud.customer_crud.repository.UserRepository;
 import com.crud.customer_crud.service.UserService;
 
 @RestController

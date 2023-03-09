@@ -45,7 +45,7 @@ class CustomerServiceTest {
 
 	@DisplayName("JUnit test for saveCustomer() method")
 	@Test
-	public void testSaveCustomer() {
+	void testSaveCustomer() {
 		Mockito.when(repo.save(Mockito.any(Customer.class))).thenReturn(customer);
 
 		Customer savedCustomer = service.saveCustomer(customer);
@@ -58,7 +58,7 @@ class CustomerServiceTest {
 
 	@DisplayName("JUnit test for getAll() method")
 	@Test
-	public void testGetAll() {
+	void testGetAll() {
 		Customer customer1 = Customer.builder().custId(101).customerName("Tony").address("Goa").contactNo("7890563420")
 				.build();
 
@@ -74,7 +74,7 @@ class CustomerServiceTest {
 
 	@DisplayName("JUnit test for getCustomerById method")
 	@Test
-	public void testFindCustomerById() throws Exception {
+	void testFindCustomerById() throws Exception {
 		// when
 		Mockito.when(repo.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(customer));
 
@@ -97,7 +97,7 @@ class CustomerServiceTest {
 	
 	@DisplayName("JUnit test for updateCustomer method")
 	@Test
-	public void testUpdateCustomer() {
+	void testUpdateCustomer() {
 		Customer c = Customer.builder().custId(100).contactNo("7878787878").address("Chikago").customerName("Ram")
 				.build();
 
@@ -114,7 +114,7 @@ class CustomerServiceTest {
 
 	@DisplayName("JUnit test for deleteCustomer method")
 	@Test
-	public void testDeleteCustomerById() {
+	void testDeleteCustomerById() {
 
 		int custId = 100;
 

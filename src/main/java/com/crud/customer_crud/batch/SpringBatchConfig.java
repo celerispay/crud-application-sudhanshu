@@ -1,5 +1,8 @@
 package com.crud.customer_crud.batch;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.sql.DataSource;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
@@ -80,6 +83,7 @@ public class SpringBatchConfig {
 		return jdbcCursorItemReader;
 	}
 
+	
 	private LineMapper<Customer> lineMapper() {
 		DefaultLineMapper<Customer> lineMapper = new DefaultLineMapper<>();
 		DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();

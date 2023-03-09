@@ -1,7 +1,5 @@
 package com.crud.customer_crud.enums;
 
-import java.util.Optional;
-
 public enum TransactionType {
 	PURCHASE("purchase"), TRANSFER("transfer"), DEPOSITE("deposit"), WITHDRAWAL("withdrawal"), PAYMENT("payment");
 
