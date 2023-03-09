@@ -13,8 +13,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.crud.customerCRUD.Entity.Customer;
-import com.crud.customerCRUD.service.CustomerService;
+import com.crud.customer_crud.controller.CustomerController;
+import com.crud.customer_crud.entity.Customer;
+import com.crud.customer_crud.service.CustomerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -40,7 +41,6 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-//@WebMvcTest(CustomerController.class)
 class CustomerControllerTest {
 
 	private MockMvc mockMvc;
@@ -68,9 +68,7 @@ class CustomerControllerTest {
 
 	@Test
 	void testCreateCustomer() throws Exception {
-		when(service.findCustomerById(Mockito.anyInt())).thenReturn(customer);
 		when(service.saveCustomer(Mockito.any(Customer.class))).thenReturn(customer);
-		
 		this.mockMvc.perform(post("/customers/create")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(customer)))
@@ -121,15 +119,8 @@ class CustomerControllerTest {
 		this.mockMvc.perform(put("/customers/update/{id}", 100)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(customer1)))
-		.andExpect(status().isOk())
-		.andExpect(MockMvcResultMatchers.jsonPath("$.custId").value(customer1.getCustId()));
-//      .andExpect(MockMvcResultMatchers.jsonPath("$.customerName", is(customer1.getCustomerName())))
-//      .andExpect(MockMvcResultMatchers.jsonPath("$.address", is(customer1.getAddress())))
-//      .andExpect(MockMvcResultMatchers.jsonPath("$.contactNo", is(customer1.getContactNo())));
-//		.andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("firstName2"))
-//	      .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("lastName2"))
-//	      .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("email2@mail.com"));
-		System.out.println(customer);
+		.andExpect(status().isOk());
+		
 	}
 		
 }

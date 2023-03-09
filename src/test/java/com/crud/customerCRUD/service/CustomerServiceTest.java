@@ -25,11 +25,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
-import com.crud.customerCRUD.Entity.BankDetails;
-import com.crud.customerCRUD.Entity.Customer;
-import com.crud.customerCRUD.Entity.Transaction;
-import com.crud.customerCRUD.Repository.CustomerRepository;
-import com.crud.exception.CustomerNotFoundException;
+
+import com.crud.customer_crud.Repository.CustomerRepository;
+import com.crud.customer_crud.entity.BankDetails;
+import com.crud.customer_crud.entity.Customer;
+import com.crud.customer_crud.entity.Transaction;
+import com.crud.customer_crud.service.CustomerService;
+import com.crud.exception.NotFoundException;
 
 @DisplayName("This Test class will test all the Customer Service")
 @ExtendWith(MockitoExtension.class)
@@ -83,7 +85,7 @@ class CustomerServiceTest {
 
 	@DisplayName("JUnit test for getCustomerById method")
 	@Test
-	public void testFindCustomerById() {
+	public void testFindCustomerById() throws Exception {
 		// when
 		Mockito.when(repo.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(customer));
 
@@ -98,7 +100,7 @@ class CustomerServiceTest {
 	@Test
 	void testFindCustomerByIdThrowsException() {
 
-		CustomerNotFoundException customerNotFoundException =assertThrows(CustomerNotFoundException.class,
+		NotFoundException customerNotFoundException =assertThrows(NotFoundException.class,
 				() -> service.findCustomerById(100));
 
 		assertEquals("Customer not found !", customerNotFoundException.getMessage());

@@ -20,13 +20,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.crud.customerCRUD.Entity.BankDetails;
-import com.crud.customerCRUD.Entity.Customer;
-import com.crud.customerCRUD.Enum.accountType;
-import com.crud.customerCRUD.Repository.BankDetailsRepository;
-import com.crud.customerCRUD.Repository.CustomerRepository;
+import com.crud.customer_crud.Enum.AccountType;
+import com.crud.customer_crud.Repository.BankDetailsRepository;
+import com.crud.customer_crud.Repository.CustomerRepository;
+import com.crud.customer_crud.entity.BankDetails;
+import com.crud.customer_crud.entity.Customer;
+import com.crud.customer_crud.service.BankDetailsService;
 import com.crud.exception.BankDetailsNotFoundException;
-import com.crud.exception.CustomerNotFoundException;
+import com.crud.exception.NotFoundException;
 
 @DisplayName("This Test class will test all the BankDetails Service")
 @ExtendWith(MockitoExtension.class)
@@ -46,7 +47,7 @@ class BankDetailsServiceTest {
 	@BeforeEach
 	public void setup() {
 		bankDetails = BankDetails.builder().accountNo("SBI235432678").bankName("State Bank Of India")
-				.accType(accountType.SAVING).availableBalance(30000L).build();
+				.accType(AccountType.SAVING).availableBalance(30000L).build();
 	}
 
 	@DisplayName("JUnit test for CreateBankDetails method")
@@ -66,7 +67,7 @@ class BankDetailsServiceTest {
 	@Test
 	public void testGetAllBankDetails() {
 		BankDetails bDetails = BankDetails.builder().accountNo("SBI235432876").bankName("State Bank Of India")
-				.accType(accountType.CURRENT).availableBalance(60000L).build();
+				.accType(AccountType.CURRENT).availableBalance(60000L).build();
 
 		// when
 		Mockito.when(repo.findAll()).thenReturn(List.of(bankDetails, bDetails));
@@ -106,7 +107,7 @@ class BankDetailsServiceTest {
 	@Test
 	public void testUpdateBankDetails() {
 		BankDetails bDetails = BankDetails.builder().accountNo("CBI98765432").bankName("Central Bank Of India")
-				.accType(accountType.SAVING).availableBalance(6000L).build();
+				.accType(AccountType.SAVING).availableBalance(6000L).build();
 
 
 		Mockito.when(repo.findByAccountNo(Mockito.anyString())).thenReturn(bankDetails);

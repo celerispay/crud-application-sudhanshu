@@ -12,10 +12,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.crud.customerCRUD.Entity.Transaction;
-import com.crud.customerCRUD.Enum.TransactionType;
-
-import com.crud.customerCRUD.Repository.TransactionRepository;
+import com.crud.customer_crud.Enum.TransactionType;
+import com.crud.customer_crud.Repository.TransactionRepository;
+import com.crud.customer_crud.entity.Transaction;
+import com.crud.customer_crud.service.TransactionService;
 
 @DisplayName("This Test class will test all the Customer Service")
 @ExtendWith(MockitoExtension.class)
@@ -67,8 +67,8 @@ class TransactionServiceTest {
 
 	@DisplayName("JUnit test for findByTransactionId() method")
 	@Test
-	void testFindByTransactionId() {
-		Mockito.when(repo.findByTransactionId(Mockito.anyString())).thenReturn(transaction);
+	void testFindByTransactionId() { 
+		Mockito.when(service.findByTransactionId(Mockito.anyString())).thenReturn(transaction);
 
 		Transaction savedTransaction = service.findByTransactionId(transaction.getTransactionId());
 

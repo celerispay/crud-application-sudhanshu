@@ -34,9 +34,10 @@ Configutation:
 
   Loggers:
       Root: 
-        level: 
+        level: DEBUG
         org.springframework.web: ERROR
         org.hibernate: DEBUG
+        org.hibernate.SQL: TRACE
         AppenderRef:
           - ref: File_Appender
           
