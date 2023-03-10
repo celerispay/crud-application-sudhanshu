@@ -11,11 +11,6 @@ import com.crud.customer_crud.entity.DemoCustomer;
 @Configuration
 public class CustomerProcessor implements ItemProcessor<Customer, DemoCustomer> {
 
-//	@Override
-//	public Customer process(Customer item) throws Exception {
-//		return new Customer();
-//	}
-
 	public DemoCustomer process(Customer cst) throws Exception {
 		System.out.println("MyBatchProcessor : Processing data : "+cst);
 		DemoCustomer demoCustomer = new DemoCustomer();

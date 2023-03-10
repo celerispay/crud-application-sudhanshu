@@ -43,7 +43,7 @@ public class SpringBatchConfig {
 
 	@Autowired
 	private CustomerRepository customerRepository;
-	
+
 	@Autowired
 	private DemoCustomerRepository demoCustomerRepository;
 
@@ -52,10 +52,9 @@ public class SpringBatchConfig {
 
 	@Autowired
 	CustomerProcessor customerProcessor;
-	
+
 	private static final String QUERY_FIND_CUSTOMERS = "SELECT " + "customer_name, " + "address, " + "contact_no "
 			+ "FROM CUSTOMER " + "ORDER BY customer_name";
-
 
 	public FlatFileItemReader<Customer> flatFileItemReader() {
 		FlatFileItemReader<Customer> itemReader = new FlatFileItemReader<>();
@@ -95,46 +94,38 @@ public class SpringBatchConfig {
 		writer.setMethodName("save");
 		return writer;
 	}
-	
-	 @Bean
-	    public JdbcCursorItemReader<Customer> jdbcCursorItemReader() {
-	        JdbcCursorItemReader<Customer> jdbcCursorItemReader
-	                = new JdbcCursorItemReader<>();
-	        jdbcCursorItemReader.setDataSource(dataSource);
-	        jdbcCursorItemReader.setSql(QUERY_FIND_CUSTOMERS);
-	        jdbcCursorItemReader.setRowMapper(new CustomerRowMapper());
-	        return jdbcCursorItemReader;
-	    }
-	
+
 	@Bean
-    public FlatFileItemWriter<Customer> flatFileItemWriter(){
-        FlatFileItemWriter<Customer> flatFileItemWriter
-                = new FlatFileItemWriter<>();
-        flatFileItemWriter.setResource
-          (new FileSystemResource
-           ("C:\\Users\\Admin\\Desktop\\crud-application-sudhanshu/customersdbtocsv.csv"));
-        flatFileItemWriter.setLineAggregator
-           (new DelimitedLineAggregator<Customer>() 
-           {{
-             setDelimiter(",");
-             setFieldExtractor(
-             	new BeanWrapperFieldExtractor<Customer>() 
-             {{
-             	setNames(new String[]
-             			{ "customerName", "address", "contactNo" });
-             }});
-            }});
-        flatFileItemWriter.setHeaderCallback
-                (writer -> writer.write("customername,address,contactNo"));
-        return flatFileItemWriter;
-    }
+	public JdbcCursorItemReader<Customer> jdbcCursorItemReader() {
+		JdbcCursorItemReader<Customer> jdbcCursorItemReader = new JdbcCursorItemReader<>();
+		jdbcCursorItemReader.setDataSource(dataSource);
+		jdbcCursorItemReader.setSql(QUERY_FIND_CUSTOMERS);
+		jdbcCursorItemReader.setRowMapper(new CustomerRowMapper());
+		return jdbcCursorItemReader;
+	}
+
+	@Bean
+	public FlatFileItemWriter<Customer> flatFileItemWriter() {
+		FlatFileItemWriter<Customer> flatFileItemWriter = new FlatFileItemWriter<>();
+		flatFileItemWriter.setResource(
+				new FileSystemResource("C:\\Users\\Admin\\Desktop\\crud-application-sudhanshu/customersdbtocsv.csv"));
+		flatFileItemWriter.setLineAggregator(new DelimitedLineAggregator<Customer>() {
+			{
+				setDelimiter(",");
+				setFieldExtractor(new BeanWrapperFieldExtractor<Customer>() {
+					{
+						setNames(new String[] { "customerName", "address", "contactNo" });
+					}
+				});
+			}
+		});
+		flatFileItemWriter.setHeaderCallback(writer -> writer.write("customername,address,contactNo"));
+		return flatFileItemWriter;
+	}
 
 	public Step step1() {
-		return stepBuilderFactory.get("csv-step")
-				.<Customer, Customer>chunk(10)
-				.reader(flatFileItemReader())
-				.writer(repositoryItemWriter())
-				.build();
+		return stepBuilderFactory.get("csv-step").<Customer, Customer>chunk(10).reader(flatFileItemReader())
+				.writer(repositoryItemWriter()).build();
 	}
 
 	public Step step2() {
@@ -142,48 +133,42 @@ public class SpringBatchConfig {
 				.<Customer, DemoCustomer>chunk(10)
 				.reader(jdbcCursorItemReader())
 				.processor(customerProcessor)
-				.writer(demoCustomerRepositoryItemWriter())
-				.build();
-	}
-	
-	public Step step3() {
-		return stepBuilderFactory.get("to-csv-step")
-				.<Customer, Customer>chunk(10)
-				.reader(jdbcCursorItemReader())
-				.writer(flatFileItemWriter())
-				.build();
+				.writer(demoCustomerRepositoryItemWriter()).build();
 	}
 
-//	@Qualifier("importcustomersfromcsv")
-//	@Bean
-//	Job importcustomersfromcsv() {
-//		return jobBuilderFactory.get("importcustomersfromcsv")
-//				.listener(listener())
-//				.flow(step1())
-//				.end()
-//				.build();
-//	}
+	public Step step3() {
+		return stepBuilderFactory.get("to-csv-step").<Customer, Customer>chunk(10).reader(jdbcCursorItemReader())
+				.writer(flatFileItemWriter()).build();
+	}
+
+	@Qualifier("importcustomersfromcsv")
+	@Bean
+	Job importcustomersfromcsv() {
+		return jobBuilderFactory.get("importcustomersfromcsv")
+				.listener(listener())
+				.flow(step1())
+					.next(step3())
+					.next(step3())
+				.end()
+				.build();
+	}
 
 //	@Bean
 //	@Qualifier("importcustomersfromdbtodb")
-//	Job importcustomersfromdbtodb() throws UnexpectedInputException, ParseException, Exception {
+//	Job importcustomersfromdbtodb()  {
 //		return jobBuilderFactory.get("importcustomersfromdbtodb")
 //				.listener(listener())
 //				.flow(step2())
 //				.end()
 //				.build();
 //	}
-	
-	@Qualifier("generateCSVReportCard")
-	@Bean
-	Job generateCSVReportCard() {
-		return jobBuilderFactory.get("generateCSVReportCard")
-				.listener(listener())
-				.flow(step3())
-				.end()
-				.build();
-	}
-	
+//
+//	@Qualifier("generateCSVReportCard")
+//	@Bean
+//	Job generateCSVReportCard() {
+//		return jobBuilderFactory.get("generateCSVReportCard").listener(listener()).flow(step3()).end().build();
+//	}
+
 	@Bean
 	JobExecutionListener listener() {
 		return new JobCompletionListener();

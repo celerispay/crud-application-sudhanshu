@@ -19,7 +19,7 @@ public class SchedulerConfig {
 	@Autowired
 	JobLauncher jobLauncher;
 
-	@Qualifier("generateCSVReportCard")
+	@Qualifier("importcustomersfromcsv")
 	@Autowired
 	Job job;
 
