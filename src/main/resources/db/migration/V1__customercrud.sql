@@ -17,7 +17,7 @@ CREATE TABLE `user` (
 CREATE TABLE `customer` (
   `cust_id` int(11) NOT NULL,
   `address` varchar(50) DEFAULT NULL,
-  `contact_no` varchar(15) NOT NULL,
+  `contact_no` varchar(15) NOT NULL  UNIQUE,
   `customer_name` varchar(15) DEFAULT NULL,
   `transaction_id` varchar(36) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -41,6 +41,15 @@ CREATE TABLE `bank_details` (
   `acc_type` varchar(15) DEFAULT NULL,
   `available_balance` bigint(50) DEFAULT NULL,
   `customer_cust_id` int(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE `demo_customer` (
+  `cust_id` int(11) NOT NULL,
+  `address` varchar(50) DEFAULT NULL,
+  `contact_no` varchar(15) NOT NULL  UNIQUE,
+  `customer_name` varchar(15) DEFAULT NULL,
+  `transaction_id` varchar(36) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 

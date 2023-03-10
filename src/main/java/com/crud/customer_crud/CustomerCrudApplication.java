@@ -18,7 +18,7 @@ public class CustomerCrudApplication {
 	
   public static void main(String[] args) {
     SpringApplication.run(CustomerCrudApplication.class, args);
-    log.info("I am running fine");
+    log.info("Customer CRUD Application is running fine");
   }
  
 

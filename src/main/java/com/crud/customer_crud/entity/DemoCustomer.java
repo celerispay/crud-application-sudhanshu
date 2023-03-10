@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -30,14 +29,14 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
-@Table(name = "customer")
+@Table(name = "demo_customer")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(exclude = "nameAttributeInThisClassWithOneToMany")
-public class Customer {
+public class DemoCustomer {
 
 	@Id
 	@NotNull
@@ -74,7 +73,7 @@ public class Customer {
 
 
 
-	public Customer(int custId, @NotBlank(message = "Name is mandatory") String customerName, String address,
+	public DemoCustomer(int custId, @NotBlank(message = "Name is mandatory") String customerName, String address,
 			@NotNull(message = "Contact number must be provided") String contactNo) {
 		super();
 		this.custId = custId;
