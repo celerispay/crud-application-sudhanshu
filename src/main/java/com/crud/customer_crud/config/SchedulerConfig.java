@@ -19,18 +19,17 @@ public class SchedulerConfig {
 	@Autowired
 	JobLauncher jobLauncher;
 
-	@Qualifier("importcustomersfromcsv")
+	@Qualifier("myJob")
 	@Autowired
 	Job job;
 
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-
-	@Scheduled(fixedDelay = 5000, initialDelay = 5000)
+	
+	@Scheduled(cron = "0 */1 * * * ?")
 	public void scheduleByFixedRate() throws Exception {
 		System.out.println("Batch job starting");
 		JobParameters jobParameters = new JobParametersBuilder()
 				.addString("time", format.format(Calendar.getInstance().getTime())).toJobParameters();
 		jobLauncher.run(job, jobParameters);
-		System.out.println("Batch job executed successfully\n");
 	}
 }

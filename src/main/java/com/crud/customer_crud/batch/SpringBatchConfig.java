@@ -1,7 +1,11 @@
 package com.crud.customer_crud.batch;
 
-import javax.sql.DataSource;
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
 
+import javax.sql.DataSource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
@@ -20,19 +24,20 @@ import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.dao.DeadlockLoserDataAccessException;
 import com.crud.customer_crud.entity.Customer;
 import com.crud.customer_crud.entity.DemoCustomer;
 import com.crud.customer_crud.repository.CustomerRepository;
 import com.crud.customer_crud.repository.DemoCustomerRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @Configuration
 @EnableBatchProcessing
-@AllArgsConstructor
+@Log4j2
 public class SpringBatchConfig {
 
 	@Autowired
@@ -50,15 +55,21 @@ public class SpringBatchConfig {
 	@Autowired
 	private DataSource dataSource;
 
+	@Value("classPath:customers.csv")
+	private Resource inputResource;
+	
+	private Resource outputResource = new FileSystemResource("output/outputData.csv");
+	
 	@Autowired
 	CustomerProcessor customerProcessor;
 
 	private static final String QUERY_FIND_CUSTOMERS = "SELECT " + "customer_name, " + "address, " + "contact_no "
 			+ "FROM CUSTOMER " + "ORDER BY customer_name";
 
+	@Bean
 	public FlatFileItemReader<Customer> flatFileItemReader() {
 		FlatFileItemReader<Customer> itemReader = new FlatFileItemReader<>();
-		itemReader.setResource(new FileSystemResource("src/main/resources/customers.csv"));
+		itemReader.setResource(inputResource);
 		itemReader.setName("csvReader");
 		itemReader.setLinesToSkip(1);
 		itemReader.setLineMapper(lineMapper());
@@ -81,6 +92,7 @@ public class SpringBatchConfig {
 		return lineMapper;
 	}
 
+	@Bean
 	public RepositoryItemWriter<Customer> repositoryItemWriter() {
 		RepositoryItemWriter<Customer> writer = new RepositoryItemWriter<>();
 		writer.setRepository(customerRepository);
@@ -88,6 +100,7 @@ public class SpringBatchConfig {
 		return writer;
 	}
 
+	@Bean
 	public RepositoryItemWriter<DemoCustomer> demoCustomerRepositoryItemWriter() {
 		RepositoryItemWriter<DemoCustomer> writer = new RepositoryItemWriter<>();
 		writer.setRepository(demoCustomerRepository);
@@ -107,8 +120,7 @@ public class SpringBatchConfig {
 	@Bean
 	public FlatFileItemWriter<Customer> flatFileItemWriter() {
 		FlatFileItemWriter<Customer> flatFileItemWriter = new FlatFileItemWriter<>();
-		flatFileItemWriter.setResource(
-				new FileSystemResource("C:\\Users\\Admin\\Desktop\\crud-application-sudhanshu/customersdbtocsv.csv"));
+		flatFileItemWriter.setResource(outputResource);
 		flatFileItemWriter.setLineAggregator(new DelimitedLineAggregator<Customer>() {
 			{
 				setDelimiter(",");
@@ -123,52 +135,65 @@ public class SpringBatchConfig {
 		return flatFileItemWriter;
 	}
 
-	public Step step1() {
-		return stepBuilderFactory.get("csv-step").<Customer, Customer>chunk(10).reader(flatFileItemReader())
-				.writer(repositoryItemWriter()).build();
+	@Bean
+	public Step importCustomersFromCSV() {
+		System.out.println("importCustomersFromCSV step is running");
+		
+		return stepBuilderFactory.get("csv-step")
+				.allowStartIfComplete(true)
+				.<Customer, Customer>chunk(10).reader(flatFileItemReader())
+				.writer(repositoryItemWriter())
+				.faultTolerant()
+				.retryLimit(3)
+			    .retry(DeadlockLoserDataAccessException.class)
+				.skipLimit(10)
+				.skip(Exception.class)
+				.noSkip(FileNotFoundException.class)
+				.build();
 	}
 
-	public Step step2() {
+	@Bean
+	public Step importCustomersFromDbToDb() {
+		System.out.println("importCustomersFromDbToDb step is running");
 		return stepBuilderFactory.get("db-step")
 				.<Customer, DemoCustomer>chunk(10)
 				.reader(jdbcCursorItemReader())
 				.processor(customerProcessor)
-				.writer(demoCustomerRepositoryItemWriter()).build();
-	}
-
-	public Step step3() {
-		return stepBuilderFactory.get("to-csv-step").<Customer, Customer>chunk(10).reader(jdbcCursorItemReader())
-				.writer(flatFileItemWriter()).build();
-	}
-
-	@Qualifier("importcustomersfromcsv")
-	@Bean
-	Job importcustomersfromcsv() {
-		return jobBuilderFactory.get("importcustomersfromcsv")
-				.listener(listener())
-				.flow(step1())
-					.next(step3())
-					.next(step3())
-				.end()
+				.writer(demoCustomerRepositoryItemWriter())
+				.faultTolerant()
+				.skipLimit(10)
+				.skip(Exception.class)
+				.noSkip(SQLException.class)
 				.build();
 	}
 
-//	@Bean
-//	@Qualifier("importcustomersfromdbtodb")
-//	Job importcustomersfromdbtodb()  {
-//		return jobBuilderFactory.get("importcustomersfromdbtodb")
-//				.listener(listener())
-//				.flow(step2())
-//				.end()
-//				.build();
-//	}
-//
-//	@Qualifier("generateCSVReportCard")
-//	@Bean
-//	Job generateCSVReportCard() {
-//		return jobBuilderFactory.get("generateCSVReportCard").listener(listener()).flow(step3()).end().build();
-//	}
+	@Bean
+	public Step importCustomersFromDbToCsv() {
+		System.out.println("importCustomersFromDbToCsv step is running");
+		return stepBuilderFactory.get("to-csv-step")
+				.<Customer, Customer>chunk(10).reader(jdbcCursorItemReader())
+				.writer(flatFileItemWriter())
+				.faultTolerant()
+				.skipLimit(10)
+				.skip(Exception.class)
+				.noSkip(FileNotFoundException.class)
+				.startLimit(1)
+				.build();
+	}
 
+	@Qualifier("myJob")
+	@Bean
+	Job myJob() {
+		return jobBuilderFactory.get("importcustomersfromcsv")
+				.listener(listener())
+				.start(importCustomersFromCSV())
+				.on("*").to(importCustomersFromDbToDb())
+				.on("*").to(importCustomersFromDbToCsv())
+				.from(importCustomersFromCSV()).on("FAILED").to(importCustomersFromDbToCsv())
+				.end()		
+				.build();
+	}
+	
 	@Bean
 	JobExecutionListener listener() {
 		return new JobCompletionListener();

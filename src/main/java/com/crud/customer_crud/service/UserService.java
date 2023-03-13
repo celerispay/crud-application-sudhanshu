@@ -25,7 +25,7 @@ public class UserService {
 	}
 
 	@Autowired
-	PasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 
 	public User save(final User userData) {
 		User userModel = populateUserData(userData);

@@ -9,9 +9,8 @@ import io.swagger.v3.oas.annotations.info.Info;
 import lombok.extern.log4j.Log4j2;
 
 
-
-@SpringBootApplication
 @EnableBatchProcessing
+@SpringBootApplication
 @Log4j2
 @OpenAPIDefinition(info = @Info(title = "Customer CRUD API", version = "1.0", description = "API Documentation for Customer CRUD"))
 public class CustomerCrudApplication {
