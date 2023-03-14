@@ -123,7 +123,7 @@ public class BankDetailsController {
 			  @ApiResponse(responseCode = "500", description = "Internal Server Error", 
 			    content = @Content)})
 	@PutMapping("/update/{accountNo}")
-	public String update(@RequestBody @Valid BankDetails bankDetails, @PathVariable String accountNo) {
+	public BankDetails update(@RequestBody @Valid BankDetails bankDetails, @PathVariable String accountNo) {
 		setupMDC("/bankdetails/update/{accountNo}");
 		log.debug("User has requested to update bank details of account Number : {}", accountNo);
 		BankDetails currDetail = bankDetailsService.findBankDetailByAccountNo(accountNo);
@@ -131,7 +131,7 @@ public class BankDetailsController {
 		currDetail.setBankName(bankDetails.getAccountNo());
 		currDetail.setAccType(bankDetails.getAccType());
 		currDetail.setCustomer(bankDetails.getCustomer());
-		return "Bank Details with Account number " + accountNo + " is updated Successfully!!!!!";
+		return currDetail;
 	}
 	
 	/**
