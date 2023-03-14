@@ -37,7 +37,7 @@ public class HomeController {
 
 	@Operation(summary = "This will lead to user header page")
 	@GetMapping("/home")
-	String home(Model model) {
+	public String home(Model model) {
 		setupMDC("/home");
         log.info("This api will return the Home page and display the user data");
 		model.addAttribute("alluserlist", userService.getAll());
@@ -46,7 +46,7 @@ public class HomeController {
 	
 	@Operation(summary = "This will lead to user header page")
 	@GetMapping("/customers")
-	String customers(Model model) {
+	public String customers(Model model) {
 		setupMDC("/customers");
         log.info("This api will return the Customer data Page and display the List of Customers");
 		model.addAttribute("customerlist", customerService.getAll());
@@ -55,7 +55,7 @@ public class HomeController {
 	
 	@Operation(summary = "This API will Return Register User form")
 	@GetMapping("/addUser")
-	String addUser(Model model) {
+	public String addUser(Model model) {
 		setupMDC("/addUser");
         log.info("This api will return the User registration form");
 		User user = new User();

@@ -1,7 +1,6 @@
 package com.crud.customercrud.controller;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -52,7 +51,7 @@ public class CustomerController {
 	@GetMapping("/customers/getAll")
 	@ResponseHeader
 	@ResponseStatus(HttpStatus.OK)
-	private List<Customer> getAllCustomers() throws NotFoundException {
+	public List<Customer> getAllCustomers() throws NotFoundException {
 		setupMDC("/getAll");
 		log.info("User has requested to fetch all the customers data");
 		return customerService.getAll();

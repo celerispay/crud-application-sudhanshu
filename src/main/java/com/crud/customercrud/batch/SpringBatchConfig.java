@@ -68,7 +68,7 @@ public class SpringBatchConfig {
 			+ "FROM CUSTOMER " + "ORDER BY customer_name";
 
 	@Bean
-	public FlatFileItemReader<Customer> flatFileItemReader() {
+	FlatFileItemReader<Customer> flatFileItemReader() {
 		FlatFileItemReader<Customer> itemReader = new FlatFileItemReader<>();
 		itemReader.setResource(inputResource);
 		itemReader.setName("csvReader");
@@ -94,7 +94,7 @@ public class SpringBatchConfig {
 	}
 
 	@Bean
-	public RepositoryItemWriter<Customer> repositoryItemWriter() {
+	RepositoryItemWriter<Customer> repositoryItemWriter() {
 		RepositoryItemWriter<Customer> writer = new RepositoryItemWriter<>();
 		writer.setRepository(customerRepository);
 		writer.setMethodName("save");
@@ -102,7 +102,7 @@ public class SpringBatchConfig {
 	}
 
 	@Bean
-	public RepositoryItemWriter<DemoCustomer> demoCustomerRepositoryItemWriter() {
+	RepositoryItemWriter<DemoCustomer> demoCustomerRepositoryItemWriter() {
 		RepositoryItemWriter<DemoCustomer> writer = new RepositoryItemWriter<>();
 		writer.setRepository(demoCustomerRepository);
 		writer.setMethodName("save");
@@ -110,7 +110,7 @@ public class SpringBatchConfig {
 	}
 
 	@Bean
-	public JdbcCursorItemReader<Customer> jdbcCursorItemReader() {
+	JdbcCursorItemReader<Customer> jdbcCursorItemReader() {
 		JdbcCursorItemReader<Customer> jdbcCursorItemReader = new JdbcCursorItemReader<>();
 		jdbcCursorItemReader.setDataSource(dataSource);
 		jdbcCursorItemReader.setSql(QUERY_FIND_CUSTOMERS);
@@ -119,25 +119,23 @@ public class SpringBatchConfig {
 	}
 
 	@Bean
-	public FlatFileItemWriter<Customer> flatFileItemWriter() {
+	FlatFileItemWriter<Customer> flatFileItemWriter() {
 		FlatFileItemWriter<Customer> flatFileItemWriter = new FlatFileItemWriter<>();
 		flatFileItemWriter.setResource(outputResource);
-		flatFileItemWriter.setLineAggregator(new DelimitedLineAggregator<Customer>() {
-			{
-				setDelimiter(",");
-				setFieldExtractor(new BeanWrapperFieldExtractor<Customer>() {
-					{
-						setNames(new String[] { "customerName", "address", "contactNo" });
-					}
-				});
-			}
-		});
+		BeanWrapperFieldExtractor<Customer> beanWrapperFieldExtractor = new BeanWrapperFieldExtractor<>();
+		beanWrapperFieldExtractor.setNames(new String[] { "customerName", "address", "contactNo" });
+		DelimitedLineAggregator<Customer> delimitedLineAggregator = new DelimitedLineAggregator<>();
+		delimitedLineAggregator.setDelimiter(",");
+		delimitedLineAggregator.setFieldExtractor(beanWrapperFieldExtractor);
+		flatFileItemWriter.setLineAggregator(delimitedLineAggregator);
 		flatFileItemWriter.setHeaderCallback(writer -> writer.write("customername,address,contactNo"));
 		return flatFileItemWriter;
 	}
+	
+	
 
 	@Bean
-	public Step importCustomersFromCSV() {
+	Step importCustomersFromCSV() {
 		log.debug("importCustomersFromCSV step is running");
 		return stepBuilderFactory.get("csv-step")
 				.allowStartIfComplete(true)
@@ -153,7 +151,7 @@ public class SpringBatchConfig {
 	}
 
 	@Bean
-	public Step importCustomersFromDbToDb() {
+	Step importCustomersFromDbToDb() {
 		log.debug("importCustomersFromDbToDb step is running");
 		return stepBuilderFactory.get("db-step")
 				.<Customer, DemoCustomer>chunk(10)
@@ -168,7 +166,7 @@ public class SpringBatchConfig {
 	}
 
 	@Bean
-	public Step importCustomersFromDbToCsv() {
+	Step importCustomersFromDbToCsv() {
 		log.debug("importCustomersFromDbToCsv step is running");
 		return stepBuilderFactory.get("to-csv-step")
 				.<Customer, Customer>chunk(10).reader(jdbcCursorItemReader())
