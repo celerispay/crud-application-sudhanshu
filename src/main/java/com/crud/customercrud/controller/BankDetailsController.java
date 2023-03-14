@@ -88,11 +88,10 @@ public class BankDetailsController {
 			  @ApiResponse(responseCode = "404", description = "Bank Details not found", 
 			    content = @Content) })
 	@DeleteMapping("/deleteByAccountNo/{accountNo}")
-	public String deleteBankDetails(@PathVariable @Valid String accountNo) throws NotFoundException{
+	public void deleteBankDetails(@PathVariable @Valid String accountNo) throws NotFoundException{
 		setupMDC("/bankdetails/deleteByAccountNo/{accountNo}");
 		log.debug("User has requested to delete bank details of account {} :", accountNo);
 		bankDetailsService.deleteBankDetailsByAccountNo(accountNo);
-		return "Customer with Bank Account number "+accountNo+" is deleted successfully...";
 	}
 
 	

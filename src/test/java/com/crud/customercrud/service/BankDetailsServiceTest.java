@@ -22,7 +22,6 @@ import com.crud.customercrud.entity.BankDetails;
 import com.crud.customercrud.enums.AccountType;
 import com.crud.customercrud.exception.NotFoundException;
 import com.crud.customercrud.repository.BankDetailsRepository;
-import com.crud.customercrud.service.BankDetailsService;
 
 @DisplayName("This Test class will test all the BankDetails Service")
 @ExtendWith(MockitoExtension.class)

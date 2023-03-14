@@ -15,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.crud.customercrud.entity.Transaction;
 import com.crud.customercrud.enums.TransactionType;
 import com.crud.customercrud.repository.TransactionRepository;
-import com.crud.customercrud.service.TransactionService;
 
 @DisplayName("This Test class will test all the Customer Service")
 @ExtendWith(MockitoExtension.class)

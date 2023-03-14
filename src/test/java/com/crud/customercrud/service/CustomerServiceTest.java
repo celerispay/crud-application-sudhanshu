@@ -21,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.crud.customercrud.entity.Customer;
 import com.crud.customercrud.exception.NotFoundException;
 import com.crud.customercrud.repository.CustomerRepository;
-import com.crud.customercrud.service.CustomerService;
 
 @DisplayName("This Test class will test all the Customer Service")
 @ExtendWith(MockitoExtension.class)
