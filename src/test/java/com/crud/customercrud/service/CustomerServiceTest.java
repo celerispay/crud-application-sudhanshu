@@ -1,4 +1,4 @@
-package com.crud.customer_crud.service;
+package com.crud.customercrud.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;

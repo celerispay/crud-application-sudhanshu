@@ -1,4 +1,4 @@
-package com.crud.customer_crud.controller;
+package com.crud.customercrud.controller;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.lenient;

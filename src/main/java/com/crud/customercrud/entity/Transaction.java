@@ -35,10 +35,6 @@ public class Transaction {
 	@Column(name="transaction_id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	long transactionId;
-		
-//	@Column(name="transaction_id",columnDefinition = "VARCHAR(36)")
-//	@Size(min = 2, max = 40)
-//	String transactionId;
 	
 	@Column(name="transaction_date")
 	@Pattern(regexp="^\\d{4}-\\d{2}-\\d{2}$",

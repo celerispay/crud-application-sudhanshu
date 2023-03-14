@@ -1,4 +1,4 @@
-package com.crud.customer_crud;
+package com.crud.customercrud;
 
 import org.junit.jupiter.api.Test;
 

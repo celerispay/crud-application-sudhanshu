@@ -1,4 +1,4 @@
-package com.crud.customer_crud.controller;
+package com.crud.customercrud.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.log4j.Log4j2;
 
 @RestController
+@Log4j2
 public class JobController {
 
 	@Autowired
@@ -23,13 +25,14 @@ public class JobController {
 	private Job job;
 
 	@Operation(summary = "Perform the Spring batch Task",description = "This API will import the customer data from csv file to the data base using Spring batch",parameters = {})
-	@GetMapping("api/importCustomers")
+	@GetMapping("/importCustomers")
 	public String importCsvToDb() throws JobExecutionAlreadyRunningException, JobRestartException,
 			JobInstanceAlreadyCompleteException, JobParametersInvalidException {
 		JobParameters jobParameters = new JobParametersBuilder().addLong("startAt", System.currentTimeMillis())
 				.toJobParameters();
 
 		jobLauncher.run(job, jobParameters);
+		log.debug("This api will be performing the batch processing task");
 		return "Batch job has been invoked";
 
 	}

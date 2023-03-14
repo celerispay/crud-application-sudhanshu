@@ -39,16 +39,25 @@ public class HomeController {
 	@GetMapping("/home")
 	String home(Model model) {
 		setupMDC("/home");
-        log.info("home page");
+        log.info("This api will return the Home page and display the user data");
 		model.addAttribute("alluserlist", userService.getAll());
 		return "header";
+	}
+	
+	@Operation(summary = "This will lead to user header page")
+	@GetMapping("/customers")
+	String customers(Model model) {
+		setupMDC("/customers");
+        log.info("This api will return the Customer data Page and display the List of Customers");
+		model.addAttribute("customerlist", customerService.getAll());
+		return "customer_data";
 	}
 	
 	@Operation(summary = "This API will Return Register User form")
 	@GetMapping("/addUser")
 	String addUser(Model model) {
 		setupMDC("/addUser");
-        log.info("addUser is called to open user registration form");
+        log.info("This api will return the User registration form");
 		User user = new User();
 		model.addAttribute("user",user);
 		return "register-user";
@@ -59,7 +68,7 @@ public class HomeController {
 	public String userSubmit(@Valid @ModelAttribute User user) {
 		setupMDC("/addUser");
         userService.save(user);
-        log.info("addUser is called to save user and will open header.html");
+        log.info("This api will save user and will display the header page ");
 		return "index";
 	}
 
@@ -67,7 +76,7 @@ public class HomeController {
 	@GetMapping("/performtransaction")
 	public String transactionsForm(Model model) {
 		setupMDC("/perfromtransaction");
-        log.info("perfromtransaction is called to open transaction form");
+        log.info("This api will display the transaction form");
 		Transaction transaction = new Transaction();
 		model.addAttribute("transaction", transaction);
 		return "transactionForm";
@@ -77,7 +86,7 @@ public class HomeController {
 	@PostMapping("/performtransaction")
 	public String transactionSubmit(@Valid @ModelAttribute Transaction transaction) {
 		setupMDC("/perfromtransaction");
-        log.info("perfromtransaction is called to save transaction and will return index.html");
+        log.info("This api will save transaction details and display the index page ");
 		transactionService.save(transaction);
 		return "index";
 	}
@@ -87,7 +96,7 @@ public class HomeController {
 	@GetMapping("/addCustomer")
 	public String addCustomer(Model model) {
 		setupMDC("/addCustomer");
-        log.info("addCustomer is called to open user registration form");
+        log.info("This api will display the Customer registration form");
 		Customer customer = new Customer();
 		model.addAttribute("customer",customer);
 		return "register-customer";
@@ -97,7 +106,7 @@ public class HomeController {
 	@PostMapping("/addCustomer")
 	public String customerRegistration(@Valid @ModelAttribute Customer customer) {
 		setupMDC("/addCustomer");
-        log.info("perfromtransaction is called to save User and will return to index.html");
+        log.info("This api will save the new User and will display the index page");
 		customerService.saveCustomer(customer);
 		return "index";
 	}	

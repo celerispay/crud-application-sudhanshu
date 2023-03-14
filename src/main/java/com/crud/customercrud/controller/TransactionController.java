@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.log4j.Log4j2;
 
 @RestController
-@RequestMapping("api/transaction")
+@RequestMapping("/transaction")
 @Log4j2
 public class TransactionController {
 
@@ -41,9 +41,9 @@ public class TransactionController {
 			    content = @Content), 
 			  @ApiResponse(responseCode = "500", description = "Internal Server Error", 
 			    content = @Content) })
-	@PostMapping("api/transaction/performtransaction")
+	@PostMapping("/performtransaction")
 	public Transaction performTransaction(@RequestBody @Valid Transaction transaction) {
-		setupMDC("api/transaction/performtransaction");
+		setupMDC("/transaction/performtransaction");
 		log.debug("User has requested to perform transaction {} with data ",transaction);
 		final Transaction tr = new Transaction();
 		tr.setTransactionId(transaction.getTransactionId());
@@ -68,9 +68,9 @@ public class TransactionController {
 			    content = @Content), 
 			  @ApiResponse(responseCode = "404", description = "No Transaction Details found", 
 			    content = @Content) })
-	@GetMapping("api/transaction/getAll")
+	@GetMapping("/getAll")
 	public List<Transaction> getAllTransaction() {
-		setupMDC("api/transaction/getAll");
+		setupMDC("/transaction/getAll");
 		log.debug("User has requested to fetch all transaction data");
 		return transactionService.getAllTransactions();
 	}
@@ -86,9 +86,9 @@ public class TransactionController {
 			    content = @Content), 
 			  @ApiResponse(responseCode = "404", description = "Transaction Details not found", 
 			    content = @Content) })
-	@GetMapping("api/transaction/getTransactionById/{id}")
+	@GetMapping("/getTransactionById/{id}")
 	public Transaction getTransactionById(@RequestBody Long id) {
-		setupMDC("api/transaction/getTransactionById/{id}");
+		setupMDC("/transaction/getTransactionById/{id}");
 		log.debug("User has requested to fetch transaction details with transaction id {} ",id);
 		return transactionService.findByTransactionId(id);
 	}

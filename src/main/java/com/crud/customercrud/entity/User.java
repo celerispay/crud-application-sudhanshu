@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @Data
@@ -21,7 +20,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Valid
-@ToString
 @Table(name="user")
 public class User{
 	

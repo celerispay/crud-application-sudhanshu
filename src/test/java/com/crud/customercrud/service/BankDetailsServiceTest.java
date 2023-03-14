@@ -1,4 +1,4 @@
-package com.crud.customer_crud.service;
+package com.crud.customercrud.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;

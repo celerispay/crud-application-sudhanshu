@@ -15,7 +15,7 @@ import lombok.extern.log4j.Log4j2;
 public class CustomerProcessor implements ItemProcessor<Customer, DemoCustomer> {
 
 	public DemoCustomer process(Customer cst) throws Exception {
-		log.info("MyBatchProcessor : Processing data : "+cst);
+		log.info("MyBatchProcessor : Processing data : {}",cst);
 		DemoCustomer demoCustomer = new DemoCustomer();
 		demoCustomer.setCustomerName(cst.getCustomerName());
 		demoCustomer.setAddress(cst.getAddress());

@@ -33,6 +33,7 @@ import lombok.extern.log4j.Log4j2;
 
 @RestController
 @Log4j2
+@RequestMapping("/bankdetails")
 public class BankDetailsController {
 	
 	@Autowired
@@ -49,9 +50,9 @@ public class BankDetailsController {
 			    content = @Content), 
 			  @ApiResponse(responseCode = "404", description = "Bank Details not found", 
 			    content = @Content) })
-	@GetMapping("api/bankdetails/getAll")
+	@GetMapping("/getAll")
 	public List<BankDetails> getAllBankDetails() {
-		setupMDC("api/bankdetails/getAll");
+		setupMDC("/bankdetails/getAll");
 		log.debug("User has requested to fetch all bank details");
 		return bankDetailsService.getAllBankDetails();
 	}
@@ -67,9 +68,9 @@ public class BankDetailsController {
 			    content = @Content), 
 			  @ApiResponse(responseCode = "404", description = "Bank Details not found", 
 			    content = @Content) })
-	@GetMapping("api/bankdetails/getByAccountNo/{accountNo}")
+	@GetMapping("/getByAccountNo/{accountNo}")
 	public BankDetails getBankDetailsByAccountNo(@PathVariable @Valid String accountNo) throws NotFoundException{
-		setupMDC("api/bankdetails/getByAccountNo/{accountNo}");
+		setupMDC("/bankdetails/getByAccountNo/{accountNo}");
 		log.debug("User has requested to fetch bank details of account {} :", accountNo);
 		return bankDetailsService.findBankDetailByAccountNo(accountNo);
 	}
@@ -86,9 +87,9 @@ public class BankDetailsController {
 			    content = @Content), 
 			  @ApiResponse(responseCode = "404", description = "Bank Details not found", 
 			    content = @Content) })
-	@DeleteMapping("api/bankdetails/deleteByAccountNo/{accountNo}")
+	@DeleteMapping("/deleteByAccountNo/{accountNo}")
 	public String deleteBankDetails(@PathVariable @Valid String accountNo) throws NotFoundException{
-		setupMDC("api/bankdetails/deleteByAccountNo/{accountNo}");
+		setupMDC("/bankdetails/deleteByAccountNo/{accountNo}");
 		log.debug("User has requested to delete bank details of account {} :", accountNo);
 		bankDetailsService.deleteBankDetailsByAccountNo(accountNo);
 		return "Customer with Bank Account number "+accountNo+" is deleted successfully...";
@@ -104,10 +105,10 @@ public class BankDetailsController {
 			    content = @Content), 
 			  @ApiResponse(responseCode = "500", description = "Internal Server Error", 
 			    content = @Content) })
-	@PostMapping("api/bankdetails/create")
+	@PostMapping("/create")
 	public ResponseEntity<BankDetails> createBankDetails(@RequestBody @Valid BankDetails bankDetails) throws AlreadyExistException{
-		setupMDC("api/bankdetails/create");
-		log.debug("User has requested to create bank details with data :", bankDetails);
+		setupMDC("/bankdetails/create");
+		log.debug("User has requested to create bank details with data :{}", bankDetails);
 		BankDetails bd = bankDetailsService.createBankDetails(bankDetails);
 		return new ResponseEntity<BankDetails>(bd, HttpStatus.CREATED);
 	}
@@ -122,10 +123,10 @@ public class BankDetailsController {
 			    content = @Content), 
 			  @ApiResponse(responseCode = "500", description = "Internal Server Error", 
 			    content = @Content)})
-	@PutMapping("api/bankdetails/update/{accountNo}")
+	@PutMapping("/update/{accountNo}")
 	public String update(@RequestBody @Valid BankDetails bankDetails, @PathVariable String accountNo) {
-		setupMDC("api/bankdetails/update/{accountNo}");
-		log.debug("User has requested to update bank details of account Number {} :", accountNo);
+		setupMDC("/bankdetails/update/{accountNo}");
+		log.debug("User has requested to update bank details of account Number : {}", accountNo);
 		BankDetails currDetail = bankDetailsService.findBankDetailByAccountNo(accountNo);
 		currDetail.setAccountNo(bankDetails.getAccountNo());
 		currDetail.setBankName(bankDetails.getAccountNo());

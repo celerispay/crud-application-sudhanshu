@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.crud.customercrud.entity.Customer;
 import com.crud.customercrud.entity.User;
 import com.crud.customercrud.repository.UserRepository;
 
-
+import lombok.extern.log4j.Log4j2;
 
 @Service
+@Log4j2
 public class UserService {
 
 	@Autowired
@@ -67,4 +69,14 @@ public class UserService {
 		return userRepository.findAll();
 	}
 
+	public User updateUser(String email, User user) {
+		log.info("updateUser method for updating User is called");
+		User currentUser = userRepository.findByEmail(email);
+		currentUser.setEmail(user.getEmail());
+		currentUser.setPassword(user.getPassword());
+		currentUser.setUsername(user.getUsername());
+		currentUser.setRole(user.getRole());
+		return userRepository.save(currentUser);
+	}
+	
 }

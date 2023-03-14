@@ -36,6 +36,7 @@ import lombok.extern.log4j.Log4j2;
 
 @RestController
 @Log4j2
+@RequestMapping("/customers")
 public class CustomerController {
 
 	@Autowired
@@ -48,16 +49,16 @@ public class CustomerController {
 			@ApiResponse(responseCode = "400", description = "Invalid data supplied", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content),
 			@ApiResponse(responseCode = "404", description = "No Customer found", content = @Content) })
-	@GetMapping("api/customers/getAll")
+	@GetMapping("/customers/getAll")
 	@ResponseHeader
 	@ResponseStatus(HttpStatus.OK)
 	private List<Customer> getAllCustomers() throws NotFoundException {
-		setupMDC("api/customers/getAll");
-		log.info("CustomerController.getAllCustomers() called by User");
+		setupMDC("/getAll");
+		log.info("User has requested to fetch all the customers data");
 		return customerService.getAll();
 	}
 
-	@Operation(summary = "Fetch the Customer with ID", description = "This API will Return the Customer with Specific customer Id", parameters = {})
+	@Operation(summary = "Fetch the Customer Data with ID", description = "This API will Return the Customer with Specific customer Id", parameters = {})
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Customer Found", content = {
 					@Content(mediaType = "application/json", schema = @Schema(implementation = Customer.class)) }),
@@ -65,9 +66,9 @@ public class CustomerController {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Customer not found", content = @Content) })
 	@ResponseStatus(HttpStatus.OK)
-	@GetMapping("api/customers/getById/{id}")
+	@GetMapping("/getById/{id}")
 	public Customer getCustomerById(@PathVariable int id) throws Exception {
-		setupMDC("api/customers/getById/{id}");
+		setupMDC("/customers/getById/{id}");
 		log.debug("User has requested to get the customer details of Customer having customer id : {} ", id);
 		return customerService.findCustomerById(id);
 	}
@@ -80,9 +81,9 @@ public class CustomerController {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Customer not found", content = @Content) })
 	@ResponseStatus(HttpStatus.OK)
-	@DeleteMapping("api/customers/delete/{id}")
+	@DeleteMapping("/delete/{id}")
 	public String deleteCustomer(@PathVariable int id) throws NotFoundException {
-		setupMDC("api/customers/delete/{id}");
+		setupMDC("/customers/delete/{id}");
 		log.debug("User has requested to delete the customer details of Customer having customer id : {} ", id);
 		customerService.deleteCustomerById(id);
 		return "Customer with customer id " + id + " is deleted successfully...";
@@ -95,10 +96,10 @@ public class CustomerController {
 			@ApiResponse(responseCode = "400", description = "Invalid data supplied", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@ResponseStatus(HttpStatus.OK)
-	@PostMapping("api/customers/create")
+	@PostMapping("/create")
 	public ResponseEntity<Customer> createCustomer(@RequestBody @Valid Customer customer)
 			throws AlreadyExistException {
-		setupMDC("api/customers/create");
+		setupMDC("/customers/create");
 		log.debug("User has requested to Create the customer with details : {} ", customer);
 		Customer cst = customerService.saveCustomer(customer);
 		return new ResponseEntity<Customer>(cst, HttpStatus.CREATED);
@@ -113,12 +114,11 @@ public class CustomerController {
 			@ApiResponse(responseCode = "404", description = "Customer data not found", content = @Content) })
 
 	@ResponseStatus(HttpStatus.OK)
-	@PutMapping("api/customers/update/{id}")
+	@PutMapping("/update/{id}")
 	public ResponseEntity<Object> updateCustomer(@PathVariable int id, @RequestBody @Valid Customer customer)
 			throws Exception {
-		setupMDC("api/customers/update/{id}");
+		setupMDC("/customers/update/{id}");
 		log.debug("User has requested to update the customer having id: {} ", id);
-		Optional<Customer> customerOptional = Optional.of(customerService.findCustomerById(id));
 		return new ResponseEntity<>(customerService.updateCustomer(id, customer), HttpStatus.OK);
 	}
 

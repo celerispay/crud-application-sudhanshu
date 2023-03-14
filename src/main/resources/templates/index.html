@@ -20,8 +20,8 @@
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#" th:href="@{/home}">Home</a>
                     <ul class="nav navbar-nav">
-                        <li><a href="#" th:href="@{api/customers/getAll}">Customers</a></li>
-                        <li><a href="#" th:href="@{api/bankdetails/getAll}">Bank Details</a></li>
+                        <li><a href="#" th:href="@{/customers}">Customers</a></li>
+                        <li><a href="#" th:href="@{/bankdetails/getAll}">Bank Details</a></li>
                         <li><a href="#" th:href="@{/addCustomer}" sec:authorize="hasAuthority('ADMIN')">Add Customer</a></li>
                         <li><a href="#" th:href="@{/importCustomers}">Import Customer CSV file to database</a></li>
                         <li><a href="#" th:href="@{/performtransaction}">Perform Transaction</a></li>

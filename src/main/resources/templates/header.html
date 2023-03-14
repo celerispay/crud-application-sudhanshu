@@ -40,9 +40,9 @@
 					<td th:text="${user.username}"></td>
 					<td th:text="${user.email}"></td>
 					<td th:text="${user.role}"></td>
-					<td><a th:href="@{api/user/update/{email}(id=${user.email})}"
+					<td><a th:href="@{/user/update/{email}(id=${user.email})}"
 						class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
-					<td><a th:href="@{api/user/deleteUser/{email}(id=${user.email})}"
+					<td><a th:href="@{/user/deleteUser/{email}(id=${user.email})}"
 						class="btn btn-primary"><i class="fas fa-user-times ml-2"></i></a></td>
 				</tr>
 			</tbody>
