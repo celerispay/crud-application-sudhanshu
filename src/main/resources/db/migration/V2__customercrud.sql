@@ -12,10 +12,10 @@ INSERT INTO `user` (`id`, `email`, `password`, `role`, `username`) VALUES
 
 
 INSERT INTO `customer` (`cust_id`, `address`, `contact_no`, `customer_name`, `transaction_id`) VALUES
-(508, 'New Delhi', '8765432109', 'sudhanshu', '48EF4798-6CE7-6E2C-3273-8FB42F83DE62');
+(508, 'New Delhi', '8765432109', 'sudhanshu', 23456);
 
 INSERT INTO `transaction` (`transaction_id`,`transaction_date`,`client_name`,`transaction_type`, `transaction_amount`) VALUES
-('48EF4798-6CE7-6E2C-3273-8FB42F83DE62','2008-11-11','State Bank Of India', 'PURCHASE', 30000);
+(23456,'2008-11-11','State Bank Of India', 'PURCHASE', 30000);
 
 
 INSERT INTO `bank_details` (`id`,`account_no`, `acc_type`, `available_balance`, `bank_name`, `customer_cust_id`) VALUES

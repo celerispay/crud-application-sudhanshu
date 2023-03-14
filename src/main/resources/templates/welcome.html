@@ -38,8 +38,8 @@
                                         <td th:text="${customer.address}"></td>
                                         <td th:text="${customer.contactNo}"></td>
                                         <td th:text="${customer.bankDetails}"></td>
-                                        <td><a th:href="@{/customer/update/{id}(id=${customer.customerName})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
-                                        <td><a th:href="@{/customer/delete/{id}(id=${customer.customerName})}" class="btn btn-primary"><i class="fas fa-user-times ml-2"></i></a></td>
+                                        <td><a th:href="@{api/customer/update/{id}(id=${customer.customerName})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
+                                        <td><a th:href="@{api/customer/delete/{id}(id=${customer.customerName})}" class="btn btn-primary"><i class="fas fa-user-times ml-2"></i></a></td>
                                     </tr>
                                 </tbody>
                             </table>

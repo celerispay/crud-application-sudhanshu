@@ -24,10 +24,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.crud.customer_crud.controller.BankDetailsController;
-import com.crud.customer_crud.entity.BankDetails;
-import com.crud.customer_crud.enums.AccountType;
-import com.crud.customer_crud.service.BankDetailsService;
+import com.crud.customercrud.controller.BankDetailsController;
+import com.crud.customercrud.entity.BankDetails;
+import com.crud.customercrud.enums.AccountType;
+import com.crud.customercrud.service.BankDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)

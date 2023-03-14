@@ -12,9 +12,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.crud.customer_crud.entity.Transaction;
-import com.crud.customer_crud.enums.TransactionType;
-import com.crud.customer_crud.repository.TransactionRepository;
+import com.crud.customercrud.entity.Transaction;
+import com.crud.customercrud.enums.TransactionType;
+import com.crud.customercrud.repository.TransactionRepository;
+import com.crud.customercrud.service.TransactionService;
 
 @DisplayName("This Test class will test all the Customer Service")
 @ExtendWith(MockitoExtension.class)
@@ -30,7 +31,7 @@ class TransactionServiceTest {
 
 	@BeforeEach
 	public void setup() {
-		transaction = Transaction.builder().transactionId("48EF4798-6CE7-6E2C-3273-8FB42F83DE62")
+		transaction = Transaction.builder().transactionId(10203040)
 				.transactionDate(LocalDate.of(1970, 10, 11)).clientName("Marcus Leonard").transactionType(TransactionType.PAYMENT).transactionAmount(20000L).build();
 	}
 	
@@ -49,7 +50,7 @@ class TransactionServiceTest {
 	@DisplayName("JUnit test for getAllTransactions() method")
 	@Test
 	void testGetAllTransactions() {
-		Transaction transaction1 = Transaction.builder().transactionId("1E624CC7-34F3-1695-67B9-71E0DD868A15")
+		Transaction transaction1 = Transaction.builder().transactionId(20406080)
 				.transactionDate(LocalDate.of(1980, 1, 9)).clientName("Patience Parrish").transactionType(TransactionType.TRANSFER).transactionAmount(200000L).build();
 	
 		
@@ -67,7 +68,7 @@ class TransactionServiceTest {
 	@DisplayName("JUnit test for findByTransactionId() method")
 	@Test
 	void testFindByTransactionId() { 
-		Mockito.when(service.findByTransactionId(Mockito.anyString())).thenReturn(transaction);
+		Mockito.when(service.findByTransactionId(Mockito.anyLong())).thenReturn(transaction);
 
 		Transaction savedTransaction = service.findByTransactionId(transaction.getTransactionId());
 

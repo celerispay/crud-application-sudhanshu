@@ -13,9 +13,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.crud.customer_crud.controller.CustomerController;
-import com.crud.customer_crud.entity.Customer;
-import com.crud.customer_crud.service.CustomerService;
+import com.crud.customercrud.controller.CustomerController;
+import com.crud.customercrud.entity.Customer;
+import com.crud.customercrud.service.CustomerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.hamcrest.CoreMatchers.is;

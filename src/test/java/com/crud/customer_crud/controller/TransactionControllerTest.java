@@ -22,10 +22,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.crud.customer_crud.controller.TransactionController;
-import com.crud.customer_crud.entity.Transaction;
-import com.crud.customer_crud.enums.TransactionType;
-import com.crud.customer_crud.service.TransactionService;
+import com.crud.customercrud.controller.TransactionController;
+import com.crud.customercrud.entity.Transaction;
+import com.crud.customercrud.enums.TransactionType;
+import com.crud.customercrud.service.TransactionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -49,8 +49,8 @@ class TransactionControllerTest {
 	public void setup() {
 		mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 		objectMapper = new ObjectMapper();
-		transaction = Transaction.builder().transactionId("1234-asdf-456-qwer").transactionAmount(20000L).transactionType(TransactionType.PAYMENT).build();
-		transaction2 = Transaction.builder().transactionId("9876-mnbv-pou-2387").transactionAmount(2000L).transactionType(TransactionType.PURCHASE).build();
+		transaction = Transaction.builder().transactionId(12345).transactionAmount(20000L).transactionType(TransactionType.PAYMENT).build();
+		transaction2 = Transaction.builder().transactionId(6789).transactionAmount(2000L).transactionType(TransactionType.PURCHASE).build();
 		
 
 	}
@@ -79,8 +79,8 @@ class TransactionControllerTest {
 
 	@Test
 	void testGetTransactionById() throws Exception {
-		lenient().when(service.findByTransactionId(Mockito.anyString())).thenReturn(transaction);
-		this.mockMvc.perform(get("/transaction/getTransactionById/{id}", "1234-asdf-456-qwer"))
+		lenient().when(service.findByTransactionId(Mockito.anyLong())).thenReturn(transaction);
+		this.mockMvc.perform(get("/transaction/getTransactionById/{id}", "12345"))
 			.andExpect(status().isOk());
 	}
 
